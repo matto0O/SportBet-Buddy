@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:title="Settings"
+        android:icon="@drawable/ic_settings"
+        android:id="@+id/settingsFragment"
+        />
+    <item
+        android:title="Games"
+        android:icon="@drawable/ic_games"
+        android:id="@+id/gamesFragment"
+        />
+    <item
+        android:title="Leagues"
+        android:icon="@drawable/ic_leagues"
+        android:id="@+id/leagueFragment"
+        />
+    <item
+        android:title="Stats"
+        android:icon="@drawable/ic_stats"
+        android:id="@+id/statsFragment"
+        />
+</menu>

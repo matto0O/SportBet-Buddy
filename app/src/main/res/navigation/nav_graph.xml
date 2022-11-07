@@ -4,63 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph.xml"
     app:startDestination="@id/gamesFragment">
+
     <fragment
         android:id="@+id/gamesFragment"
         android:name="com.amnpa.tbd.GamesFragment"
         android:label="fragment_games"
         tools:layout="@layout/fragment_games" >
-        <action
-            android:id="@+id/action_gamesFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
-        <action
-            android:id="@+id/action_gamesFragment_to_statsFragment"
-            app:destination="@id/statsFragment" />
-        <action
-            android:id="@+id/action_gamesFragment_to_leagueFragment"
-            app:destination="@id/leagueFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.amnpa.tbd.SettingsFragment"
         android:label="SettingsFragment" >
-        <action
-            android:id="@+id/action_settingsFragment_to_gamesFragment"
-            app:destination="@id/gamesFragment" />
-        <action
-            android:id="@+id/action_settingsFragment_to_statsFragment"
-            app:destination="@id/statsFragment" />
-        <action
-            android:id="@+id/action_settingsFragment_to_leagueFragment"
-            app:destination="@id/leagueFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/leagueFragment"
         android:name="com.amnpa.tbd.LeagueFragment"
         android:label="fragment_league"
         tools:layout="@layout/fragment_league" >
-        <action
-            android:id="@+id/action_leagueFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
-        <action
-            android:id="@+id/action_leagueFragment_to_statsFragment"
-            app:destination="@id/statsFragment" />
-        <action
-            android:id="@+id/action_leagueFragment_to_gamesFragment"
-            app:destination="@id/gamesFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/statsFragment"
         android:name="com.amnpa.tbd.StatsFragment"
         android:label="fragment_stats"
         tools:layout="@layout/fragment_stats" >
-        <action
-            android:id="@+id/action_statsFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
-        <action
-            android:id="@+id/action_statsFragment_to_gamesFragment"
-            app:destination="@id/gamesFragment" />
-        <action
-            android:id="@+id/action_statsFragment_to_gamesFragment2"
-            app:destination="@id/gamesFragment" />
     </fragment>
 </navigation>
