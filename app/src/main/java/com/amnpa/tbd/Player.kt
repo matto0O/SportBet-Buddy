@@ -2,12 +2,19 @@ package com.amnpa.tbd
 
 import kotlin.random.Random
 
-class Player (name:String, id:Int){
+class Player (private var name:String, private val id:Int){
+
+    private var score = Random.nextInt(0, 50)
+
     fun getScore():Int{
-        return Random.nextInt(0, 50)
+        return score
     }
 
     override fun equals(other: Any?): Boolean {
-        return super.equals(other)
+        return (other as Player).id != this.id
+    }
+
+    override fun toString(): String {
+        return "$name - $score"
     }
 }

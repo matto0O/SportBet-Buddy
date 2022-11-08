@@ -20,4 +20,7 @@
     <string name="join">Join</string>
     <string name="create_league">Create a new league</string>
     <string name="enter_code">Enter league code here</string>
+    <string name="code_placeholder">Code placeholder</string>
+    <string name="name_placeholder">Name placeholder</string>
+    <string name="quit_league">Quit the league</string>
 </resources>

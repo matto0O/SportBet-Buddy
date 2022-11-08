@@ -1,6 +1,6 @@
 package com.amnpa.tbd
 
-class League(var name: String, var code: Int) {
+class League(private var name: String, private var code: Int) {
     private val participants = mutableSetOf<Player>()
 
     fun addPlayer(player: Player){
@@ -12,7 +12,15 @@ class League(var name: String, var code: Int) {
     }
 
     fun orderedPlayers(): List<Player>{
-        return participants.toList().sortedBy { it.getScore() }
+        return participants.toList().sortedBy { -it.getScore() }
+    }
+
+    fun getName(): String{
+        return name
+    }
+
+    fun getCode(): Int{
+        return code
     }
 
     override fun toString(): String {

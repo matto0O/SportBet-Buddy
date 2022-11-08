@@ -1,5 +1,6 @@
 package com.amnpa.tbd
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,8 +10,8 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
+import android.widget.TextView
 import android.widget.Toast
-import androidx.recyclerview.widget.RecyclerView
 
 class LeagueFragment : Fragment() {
 
@@ -31,7 +32,28 @@ class LeagueFragment : Fragment() {
         buttonCreate = view.findViewById(R.id.buttonCreateLeague)
         listLeagues = view.findViewById(R.id.listViewLeagues)
 
-        listLeagues.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, placeholderLeagues())
+        listLeagues.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,
+            placeholderLeagues())
+
+        listLeagues.setOnItemClickListener { adapterView, v, position, row ->
+            val builder = AlertDialog.Builder(context)
+            val popup = layoutInflater.inflate(R.layout.league_status_popup, null)
+
+            val textLeagueCode = popup.findViewById<TextView>(R.id.textViewLeagueCode)
+            val textLeagueName = popup.findViewById<TextView>(R.id.textViewLeagueName)
+            val buttonQuit = popup.findViewById<Button>(R.id.buttonQuitLeague)
+            val listPlayers = popup.findViewById<ListView>(R.id.listViewPlayers)
+
+
+            val selected = listLeagues.adapter.getItem(row.toInt()) as League
+            textLeagueCode.text = selected.getCode().toString()
+            textLeagueName.text = selected.getName()
+            listPlayers.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,
+                selected.orderedPlayers())
+
+            builder.setView(popup)
+            builder.create().show()
+        }
 
         buttonJoin.setOnClickListener{
             if (textEnterCode.text.toString() == "")
