@@ -42,9 +42,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonJoinLeague" />
 
-    <androidx.recyclerview.widget.RecyclerView
+    <ListView
+        android:id="@+id/listViewLeagues"
         android:layout_width="300dp"
-        android:layout_height="350dp"
+        android:layout_height="250dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
