@@ -2,22 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:title="Settings"
+        android:title="@string/settings"
         android:icon="@drawable/ic_settings"
         android:id="@+id/settingsFragment"
         />
     <item
-        android:title="Games"
+        android:title="@string/games"
         android:icon="@drawable/ic_games"
         android:id="@+id/gamesFragment"
         />
     <item
-        android:title="Leagues"
+        android:title="@string/leagues"
         android:icon="@drawable/ic_leagues"
         android:id="@+id/leagueFragment"
         />
     <item
-        android:title="Stats"
+        android:title="@string/stats"
         android:icon="@drawable/ic_stats"
         android:id="@+id/statsFragment"
         />
