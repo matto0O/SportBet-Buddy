@@ -4,51 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/teal_200"
     tools:context=".LeagueFragment">
 
     <EditText
-        android:id="@+id/editTextEnterCode"
+        android:id="@+id/editTextLeagueName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="@string/enter_code"
-        android:inputType="textPersonName"
+        android:gravity="center"
+        android:hint="@string/insert_league_name"
+        android:inputType="textShortMessage|text"
         android:minHeight="48dp"
         android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/buttonJoinLeague"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="#4CAF50"
-        android:text="@string/join"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEnterCode" />
-
-    <Button
-        android:id="@+id/buttonCreateLeague"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:backgroundTint="#C31306"
-        android:text="@string/create_league"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonJoinLeague" />
-
     <ListView
-        android:id="@+id/listViewLeagues"
-        android:layout_width="300dp"
-        android:layout_height="250dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/listViewChooseEvents"
+        android:layout_width="250dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonCreateLeague" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextLeagueName" />
+
+    <Button
+        android:id="@+id/buttonCommitLeagueCreation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="#C31306"
+        android:text="@string/create"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listViewChooseEvents" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
