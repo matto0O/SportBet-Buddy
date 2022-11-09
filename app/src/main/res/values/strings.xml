@@ -23,4 +23,6 @@
     <string name="code_placeholder">Code placeholder</string>
     <string name="name_placeholder">Name placeholder</string>
     <string name="quit_league">Quit the league</string>
+    <string name="insert_league_name">Your league\'s name</string>
+    <string name="create">Create</string>
 </resources>
