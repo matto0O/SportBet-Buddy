@@ -2,6 +2,7 @@ package com.amnpa.tbd
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -51,8 +52,9 @@ class LeagueFragment : Fragment() {
         }
 
         buttonCreate.setOnClickListener {
-            val builder = AlertDialog.Builder(context)
             val popup = layoutInflater.inflate(R.layout.league_creator_popup, null)
+            val popupWindow = PopupWindow(popup, (view.width * 0.75).toInt(),
+                    (view.height * 0.75).toInt(), true)
 
             val textLeagueName = popup.findViewById<EditText>(R.id.editTextLeagueName)
             val buttonCommit = popup.findViewById<Button>(R.id.buttonCommitLeagueCreation)
@@ -75,13 +77,14 @@ class LeagueFragment : Fragment() {
             buttonCommit.setOnClickListener {
                 if (textLeagueName.text.toString().length < 3)
                     Toast.makeText(context, "Invalid league name", Toast.LENGTH_SHORT).show()
-                else
+                else {
                     Toast.makeText(context, "Created ${textLeagueName.text}",
-                        Toast.LENGTH_SHORT).show()
+                            Toast.LENGTH_SHORT).show()
+                    popupWindow.dismiss()
+                }
             }
 
-            builder.setView(popup)
-            builder.create().show()
+            popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
         }
 
         buttonJoin.setOnClickListener{
