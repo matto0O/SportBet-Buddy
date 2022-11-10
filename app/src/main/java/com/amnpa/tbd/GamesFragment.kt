@@ -1,11 +1,12 @@
 package com.amnpa.tbd
 
-import android.app.AlertDialog
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,35 +37,34 @@ class GamesFragment : Fragment() {
         recyclerView = view.findViewById(R.id.gamesRecyclerView)
         title = view.findViewById(R.id.gamesText)
         buttonGames = view.findViewById(R.id.gamesButton)
-
-        val builder = AlertDialog.Builder(context)
-        val popup: View = layoutInflater.inflate(R.layout.game_popup, null)
         val showPopup: (String, String) -> Unit = { t1: String, t2: String ->
+            val popup: View = layoutInflater.inflate(R.layout.game_popup, null)
+            val popupWindow = PopupWindow(popup, (view.width * 0.75).toInt(),
+                (view.height * 0.75).toInt(), true)
             popup.findViewById<TextView>(R.id.selectTeam1).text = t1
             popup.findViewById<TextView>(R.id.selectTeam2).text = t2
-            builder.setView(popup)
-            builder.create().show()
+            popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
         }
 
         resultAdapter = ResultAdapter(mutableListOf(), showPopup)
         resultAdapter.reloadData(placeholderResults)
 
         recyclerView.adapter = resultAdapter
-        recyclerView.layoutManager = LinearLayoutManager(getContext())
+        recyclerView.layoutManager = LinearLayoutManager(context)
 
         buttonGames.setOnClickListener {
             when(title.text){
-                "Results" -> title.text = "Upcoming"
-                "Upcoming" -> title.text = "Results"
+                getString(R.string.results_games) -> title.text = getString(R.string.upcoming_games)
+                getString(R.string.upcoming_games) -> title.text = getString(R.string.results_games)
             }
 
             when(buttonGames.text) {
-                "Results" -> {
-                    buttonGames.text = "Upcoming"
+                getString(R.string.results_games) -> {
+                    buttonGames.text = getString(R.string.upcoming_games)
                     resultAdapter.reloadData(placeholderResults)
                 }
-                "Upcoming" -> {
-                    buttonGames.text = "Results"
+                getString(R.string.upcoming_games) -> {
+                    buttonGames.text = getString(R.string.results_games)
                     resultAdapter.reloadData(placeholderUpcoming)
                 }
             }

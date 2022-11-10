@@ -1,6 +1,5 @@
 package com.amnpa.tbd
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.Gravity
 import androidx.fragment.app.Fragment
@@ -32,14 +31,20 @@ class LeagueFragment : Fragment() {
             placeholderLeagues())
 
         listLeagues.setOnItemClickListener { adapterView, v, position, row ->
-            val builder = AlertDialog.Builder(context)
             val popup = layoutInflater.inflate(R.layout.league_status_popup, null)
+            val popupWindow = PopupWindow(popup, (view.width * 0.75).toInt(),
+                (view.height * 0.75).toInt(), true)
 
             val textLeagueCode = popup.findViewById<TextView>(R.id.textViewLeagueCode)
             val textLeagueName = popup.findViewById<TextView>(R.id.textViewLeagueName)
             val buttonQuit = popup.findViewById<Button>(R.id.buttonQuitLeague)
             val listPlayers = popup.findViewById<ListView>(R.id.listViewPlayers)
 
+            buttonQuit.setOnClickListener {
+                Toast.makeText(context, "Left ${textLeagueName.text}", Toast.LENGTH_SHORT)
+                    .show()
+                popupWindow.dismiss()
+            }
 
             val selected = listLeagues.adapter.getItem(row.toInt()) as League
             textLeagueCode.text = selected.getCode().toString()
@@ -47,8 +52,7 @@ class LeagueFragment : Fragment() {
             listPlayers.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,
                 selected.orderedPlayers())
 
-            builder.setView(popup)
-            builder.create().show()
+            popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
         }
 
         buttonCreate.setOnClickListener {

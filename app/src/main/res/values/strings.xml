@@ -32,4 +32,6 @@
     <string name="games">Games</string>
     <string name="leagues">Leagues</string>
     <string name="stats">Stats</string>
+    <string name="upcoming_games">Upcoming</string>
+    <string name="results_games">Results</string>
 </resources>
