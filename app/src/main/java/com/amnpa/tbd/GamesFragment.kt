@@ -37,13 +37,23 @@ class GamesFragment : Fragment() {
         recyclerView = view.findViewById(R.id.gamesRecyclerView)
         title = view.findViewById(R.id.gamesText)
         buttonGames = view.findViewById(R.id.gamesButton)
+
         val showPopup: (String, String) -> Unit = { t1: String, t2: String ->
             val popup: View = layoutInflater.inflate(R.layout.game_popup, null)
             val popupWindow = PopupWindow(popup, (view.width * 0.75).toInt(),
                 (view.height * 0.75).toInt(), true)
-            popup.findViewById<TextView>(R.id.selectTeam1).text = t1
-            popup.findViewById<TextView>(R.id.selectTeam2).text = t2
+
+            val team1 = popup.findViewById<TextView>(R.id.selectTeam1)
+            team1.text = t1
+            team1.setOnClickListener { popupWindow.dismiss() }
+            val team2 = popup.findViewById<TextView>(R.id.selectTeam2)
+            team2.text = t2
+            team2.setOnClickListener { popupWindow.dismiss() }
+            popup.findViewById<TextView>(R.id.selectDraw)
+                .setOnClickListener { popupWindow.dismiss() }
+
             popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
+
         }
 
         resultAdapter = ResultAdapter(mutableListOf(), showPopup)

@@ -19,7 +19,7 @@
         android:id="@+id/selectDraw"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:text="Draw"
+        android:text="@string/draw"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
