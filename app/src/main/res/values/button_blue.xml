@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="button_blue">
+        <item name="android:background">@drawable/default_button_blue</item>
+    </style>
+</resources>

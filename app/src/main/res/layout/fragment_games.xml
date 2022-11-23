@@ -36,10 +36,11 @@
 
     <Button
         android:id="@+id/gamesButton"
-        android:layout_width="150dp"
+        android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_margin="15dp"
         android:layout_marginBottom="36dp"
+        android:background="@drawable/default_button_blue"
         android:text="@string/upcoming"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
