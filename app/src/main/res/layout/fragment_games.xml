@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".GamesFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/gamesText"
         android:layout_width="wrap_content"
@@ -14,7 +13,7 @@
         android:text="@string/results"
         android:layout_marginTop="30dp"
         android:textSize="25sp"
-        android:textColor="@color/black"
+        android:textColor="@color/app_main2"
         android:textStyle="bold"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,8 +39,11 @@
         android:layout_height="50dp"
         android:layout_margin="15dp"
         android:layout_marginBottom="36dp"
-        android:background="@drawable/default_button_blue"
+        android:background="@drawable/button_blueish"
+        app:backgroundTint="@color/white"
+        app:backgroundTintMode="multiply"
         android:text="@string/upcoming"
+        android:textColor="@color/app_main2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

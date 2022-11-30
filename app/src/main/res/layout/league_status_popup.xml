@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#9BFFBF"
+    android:background="@drawable/popup_temp"
     tools:context=".LeagueFragment">
 
     <TextView
@@ -46,8 +46,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:backgroundTint="#C31306"
+        android:background="@drawable/button_redish"
+        app:backgroundTint="#FFFFFF"
+        app:backgroundTintMode="multiply"
         android:text="@string/quit_league"
+        android:textColor="@color/app_main2"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
