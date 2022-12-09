@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/popup_temp">
+    android:background="@drawable/background_popup"
+    android:backgroundTintMode="add"
+    android:backgroundTint="@color/app_main">
 
     <Button
         android:id="@+id/selectTeam1"

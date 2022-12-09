@@ -1,6 +1,7 @@
 package com.amnpa.tbd
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -78,6 +79,7 @@ class GamesFragment : Fragment() {
                     resultAdapter.reloadData(placeholderUpcoming)
                 }
             }
+            Log.v("games", ParseJSON.getGroups()!![0].toString())
         }
         return view
     }
