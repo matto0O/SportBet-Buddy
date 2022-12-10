@@ -1,5 +1,6 @@
 package com.amnpa.tbd
 
+import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.view.Gravity
 import androidx.fragment.app.Fragment
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.fragment.app.FragmentContainerView
 
 class LeagueFragment : Fragment() {
 
@@ -14,6 +16,8 @@ class LeagueFragment : Fragment() {
     private lateinit var buttonJoin:Button
     private lateinit var buttonCreate:Button
     private lateinit var listLeagues: ListView
+    private lateinit var fragmentContainerView: FragmentContainerView
+    private lateinit var loading: ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -118,5 +122,31 @@ class LeagueFragment : Fragment() {
             leagues.add(league)
         }
         return leagues
+    }
+
+
+    override fun onResume() {
+        fragmentContainerView = requireActivity().findViewById(R.id.fragmentContainerView)
+        loading = requireActivity().findViewById(R.id.loadingScreen)
+        super.onResume()
+    }
+
+    override fun onPause() {
+        (loading.drawable as AnimationDrawable).stop()
+        fragmentContainerView.alpha = 1F
+        loading.alpha=0F
+        super.onPause()
+    }
+
+    private fun triggerLoadingScreen(){
+        fragmentContainerView.alpha = 0.2F
+        loading.alpha=1F
+        (loading.drawable as AnimationDrawable).start()
+    }
+
+    private fun dissolveLoadingScreen(){
+        (loading.drawable as AnimationDrawable).stop()
+        fragmentContainerView.alpha = 1F
+        loading.alpha=0F
     }
 }

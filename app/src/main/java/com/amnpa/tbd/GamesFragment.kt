@@ -1,5 +1,6 @@
 package com.amnpa.tbd
 
+import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -7,11 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentContainerView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.*
 
 
 class GamesFragment : Fragment() {
@@ -19,6 +23,8 @@ class GamesFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var buttonGames: Button
     private lateinit var title: TextView
+    private lateinit var fragmentContainerView: FragmentContainerView
+    private lateinit var loading: ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -79,11 +85,52 @@ class GamesFragment : Fragment() {
                     resultAdapter.reloadData(placeholderUpcoming)
                 }
             }
-            Log.v("games", ParseJSON.getGroups()!![0].toString())
+            GlobalScope.launch(Dispatchers.IO) {
+                triggerLoadingScreen()
+                val v = async {
+                    while (true){
+                        try {
+                            return@async ParseJSON.getGroups()!!
+                        } catch (e:Exception) {
+                            when(e){
+                                is java.net.ProtocolException,
+                                is java.net.ConnectException ->
+                                    continue
+                                else -> throw e
+                            }
+                        }
+                    }
+                } as Deferred<Array<NewLeague>?>
+                Log.v("games",  v.await()!![0].toString())
+                dissolveLoadingScreen()
+            }
         }
         return view
     }
 
 
+    override fun onResume() {
+        fragmentContainerView = requireActivity().findViewById(R.id.fragmentContainerView)
+        loading = requireActivity().findViewById(R.id.loadingScreen)
+        super.onResume()
+    }
 
+    override fun onPause() {
+        (loading.drawable as AnimationDrawable).stop()
+        fragmentContainerView.alpha = 1F
+        loading.alpha=0F
+        super.onPause()
+    }
+
+    private fun triggerLoadingScreen(){
+        fragmentContainerView.alpha = 0.2F
+        loading.alpha=1F
+        (loading.drawable as AnimationDrawable).start()
+    }
+
+    private fun dissolveLoadingScreen(){
+        (loading.drawable as AnimationDrawable).stop()
+        fragmentContainerView.alpha = 1F
+        loading.alpha=0F
+    }
 }

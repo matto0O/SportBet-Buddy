@@ -18,103 +18,66 @@ object ParseJSON {
 
         var result: Array<NewLeague>? = null
 
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                Log.e("request", e.toString())
-                e.printStackTrace()
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                result = gson.fromJson(response.body!!.string(), Array<NewLeague>::class.java)
-            }
-        })
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+            result = gson.fromJson(response.body!!.string(), Array<NewLeague>::class.java)
+        }
         return result
     }
 
-    fun getCompetitions(): String {
+    fun getCompetitions(): Array<NewCompetition>? {
         val request = Request.Builder()
             .url("http://10.0.2.2:5000//leagues")
             .build()
 
-        var result = ""
+        var result: Array<NewCompetition>? = null
 
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                Log.e("request", e.toString())
-                e.printStackTrace()
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                result = response.body!!.string()
-                Log.v("req", result)
-                val a = gson.fromJson(result, Array<NewCompetition>::class.java)
-                Log.v("req", a[1].toString())
-            }
-        })
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+            result = gson.fromJson(response.body!!.string(), Array<NewCompetition>::class.java)
+        }
         return result
     }
 
-    fun getGames(): String {
+    fun getGames(): Array<NewGame>? {
         val request = Request.Builder()
             .url("http://10.0.2.2:5000//games")
             .build()
 
-        var result = ""
+        var result: Array<NewGame>? = null
 
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                Log.e("request", e.toString())
-                e.printStackTrace()
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                result = response.body!!.string()
-                val a = gson.fromJson(result, Array<NewGame>::class.java)
-            }
-        })
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+            result = gson.fromJson(response.body!!.string(), Array<NewGame>::class.java)
+        }
         return result
     }
 
-    fun getGamesByLeague(leagueId: Int): String {
+    fun getGamesByLeague(leagueId: Int): Array<NewGame>? {
         val request = Request.Builder()
             .url("http://10.0.2.2:5000//games-by-league/$leagueId")
             .build()
 
-        var result = ""
+        var result: Array<NewGame>? = null
 
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                Log.e("request", e.toString())
-                e.printStackTrace()
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                result = response.body!!.string()
-                Log.v("req", result)
-                val a = gson.fromJson(result, Array<NewGame>::class.java)
-            }
-        })
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+            result = gson.fromJson(response.body!!.string(), Array<NewGame>::class.java)
+        }
         return result
     }
 
-//    fun getBets(): String {
-//        val request = Request.Builder()
-//            .url("http://10.0.2.2:5000//bets")
-//            .build()
-//
-//        var result: String = ""
-//
-//        client.newCall(request).enqueue(object : Callback {
-//            override fun onFailure(call: Call, e: IOException) {
-//                Log.e("request", e.toString())
-//                e.printStackTrace()
-//            }
-//
-//            override fun onResponse(call: Call, response: Response) {
-//                result = response.body!!.string()
-//                val a = gson.fromJson(result, Array<NewBet>::class.java)
-//            }
-//        })
-//        return result
-//    }
+    fun getBets(): Array<NewBet>? {
+        val request = Request.Builder()
+            .url("http://10.0.2.2:5000//bets")
+            .build()
+
+        var result: Array<NewBet>? = null
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+            result = gson.fromJson(response.body!!.string(), Array<NewBet>::class.java)
+        }
+        return result
+    }
 }
