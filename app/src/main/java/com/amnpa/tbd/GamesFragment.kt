@@ -2,7 +2,6 @@ package com.amnpa.tbd
 
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -15,11 +14,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.*
 
 
 class GamesFragment : Fragment() {
-    private lateinit var resultAdapter: ResultAdapter
+    private lateinit var betAdapter: BetAdapter
+    private lateinit var gameAdapter: GameAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var buttonGames: Button
     private lateinit var title: TextView
@@ -31,16 +30,7 @@ class GamesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_games, container, false)
-        val placeholderResults = listOf(
-            Game("Real Madryd", "FC Barcelona", false, false),
-            Game("Man City", "Liverpool", true, false),
-            Game("Wisła Płock", "Raków Częstochowa", true, false),
-            Game("Bayern Monachium", "FC Barcelona", false, false)
-        )
 
-        val placeholderUpcoming = listOf(
-            Game("Ślask Wrocław", "Legia", false, true),
-        )
         recyclerView = view.findViewById(R.id.gamesRecyclerView)
         title = view.findViewById(R.id.gamesText)
         buttonGames = view.findViewById(R.id.gamesButton)
@@ -63,63 +53,49 @@ class GamesFragment : Fragment() {
 
         }
 
-        resultAdapter = ResultAdapter(mutableListOf(), showPopup)
-        resultAdapter.reloadData(placeholderResults)
+        betAdapter = BetAdapter(mutableListOf(), showPopup)
+        gameAdapter = GameAdapter(mutableListOf(), showPopup)
 
-        recyclerView.adapter = resultAdapter
+        recyclerView.adapter = betAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         buttonGames.setOnClickListener {
-            when(title.text){
-                getString(R.string.results_games) -> title.text = getString(R.string.upcoming_games)
-                getString(R.string.upcoming_games) -> title.text = getString(R.string.results_games)
-            }
 
-            when(buttonGames.text) {
+            when(title.text){
                 getString(R.string.results_games) -> {
-                    buttonGames.text = getString(R.string.upcoming_games)
-                    resultAdapter.reloadData(placeholderResults)
+                    title.text = getString(R.string.upcoming_games)
+                    buttonGames.text = getString(R.string.results_games)
+                    recyclerView.adapter = gameAdapter
+                    ParseJSON.fetchGames(
+                        ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importGames)
                 }
                 getString(R.string.upcoming_games) -> {
-                    buttonGames.text = getString(R.string.results_games)
-                    resultAdapter.reloadData(placeholderUpcoming)
+                    title.text = getString(R.string.results_games)
+                    buttonGames.text = getString(R.string.upcoming_games)
+                    recyclerView.adapter = betAdapter
+                    ParseJSON.fetchBets(
+                        ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importBets)
                 }
-            }
-            GlobalScope.launch(Dispatchers.IO) {
-                triggerLoadingScreen()
-                val v = async {
-                    while (true){
-                        try {
-                            return@async ParseJSON.getGroups()!!
-                        } catch (e:Exception) {
-                            when(e){
-                                is java.net.ProtocolException,
-                                is java.net.ConnectException ->
-                                    continue
-                                else -> throw e
-                            }
-                        }
-                    }
-                } as Deferred<Array<NewLeague>?>
-                Log.v("games",  v.await()!![0].toString())
-                dissolveLoadingScreen()
             }
         }
         return view
     }
 
-
-    override fun onResume() {
+    override fun onStart() {
         fragmentContainerView = requireActivity().findViewById(R.id.fragmentContainerView)
         loading = requireActivity().findViewById(R.id.loadingScreen)
-        super.onResume()
+        ParseJSON.fetchGames(
+            ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importGames)
+        ParseJSON.fetchBets(
+            ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importBets)
+        super.onStart()
     }
 
-    override fun onPause() {
+    override fun onStop() {
         (loading.drawable as AnimationDrawable).stop()
         fragmentContainerView.alpha = 1F
         loading.alpha=0F
-        super.onPause()
+        super.onStop()
     }
 
     private fun triggerLoadingScreen(){
@@ -132,5 +108,25 @@ class GamesFragment : Fragment() {
         (loading.drawable as AnimationDrawable).stop()
         fragmentContainerView.alpha = 1F
         loading.alpha=0F
+    }
+
+    private fun importGames(data: Array<NewGame>?){
+        requireActivity().runOnUiThread {
+            try {
+                gameAdapter.reloadData(data!!.asList())
+            } catch (e: java.lang.NullPointerException) {
+                gameAdapter.reloadData(emptyList())
+            }
+        }
+    }
+
+    private fun importBets(data: Array<NewBet>?){
+        requireActivity().runOnUiThread {
+            try {
+                betAdapter.reloadData(data!!.asList())
+            } catch (e: java.lang.NullPointerException) {
+                betAdapter.reloadData(emptyList())
+            }
+        }
     }
 }

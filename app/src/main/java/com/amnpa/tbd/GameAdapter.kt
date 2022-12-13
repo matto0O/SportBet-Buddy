@@ -8,10 +8,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_game.view.*
 
-class ResultAdapter(
-    private val games: MutableList<Game>,
+class GameAdapter(
+    private val games: MutableList<NewGame>,
     private val show: (String, String) -> Unit
-) : RecyclerView.Adapter<ResultAdapter.ResultViewHolder>() {
+) : RecyclerView.Adapter<GameAdapter.ResultViewHolder>() {
 
     class ResultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -31,19 +31,19 @@ class ResultAdapter(
 
         holder.itemView.apply {
             gamesText.text = curResult.team1 + " vs " + curResult.team2
-            when(curResult.wasCorrect){
+            when(curResult.result==1){
                 true -> resultImg.setImageResource(R.drawable.ic_baseline_check_circle_24)
                 false -> resultImg.setImageResource(R.drawable.ic_baseline_cancel_24)
             }
-            if(curResult.isUpcoming) {
-                resultImg.visibility = View.GONE
-                setOnClickListener {
-                    show(curResult.team1, curResult.team2)
-                }
-            }
-            else{
-                resultImg.visibility = View.VISIBLE
-            }
+//            if(curResult.isUpcoming) {
+//                resultImg.visibility = View.GONE
+//                setOnClickListener {
+//                    show(curResult.team1, curResult.team2)
+//                }
+//            }
+//            else{
+//                resultImg.visibility = View.VISIBLE
+//            }
 
         }
     }
@@ -53,7 +53,7 @@ class ResultAdapter(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun reloadData(newData: List<Game>){
+    fun reloadData(newData: List<NewGame>){
         games.clear()
         games.addAll(newData)
         notifyDataSetChanged()

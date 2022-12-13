@@ -125,17 +125,17 @@ class LeagueFragment : Fragment() {
     }
 
 
-    override fun onResume() {
+    override fun onStart() {
         fragmentContainerView = requireActivity().findViewById(R.id.fragmentContainerView)
         loading = requireActivity().findViewById(R.id.loadingScreen)
-        super.onResume()
+        super.onStart()
     }
 
-    override fun onPause() {
+    override fun onStop() {
         (loading.drawable as AnimationDrawable).stop()
         fragmentContainerView.alpha = 1F
         loading.alpha=0F
-        super.onPause()
+        super.onStop()
     }
 
     private fun triggerLoadingScreen(){

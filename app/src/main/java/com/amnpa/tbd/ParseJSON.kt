@@ -1,8 +1,8 @@
 package com.amnpa.tbd
 
-import android.util.Log
 import android.widget.*
 import com.google.gson.Gson
+import kotlinx.coroutines.*
 import okhttp3.*
 import java.io.IOException
 
@@ -11,7 +11,7 @@ object ParseJSON {
     private val client = OkHttpClient()
     private val gson = Gson()
 
-    fun getGroups(): Array<NewLeague>? {
+    private fun getGroups(): Array<NewLeague>? {
         val request = Request.Builder()
             .url("http://10.0.2.2:5000//groups-by-user/1")
             .build()
@@ -25,7 +25,7 @@ object ParseJSON {
         return result
     }
 
-    fun getCompetitions(): Array<NewCompetition>? {
+    private fun getCompetitions(): Array<NewCompetition>? {
         val request = Request.Builder()
             .url("http://10.0.2.2:5000//leagues")
             .build()
@@ -39,7 +39,7 @@ object ParseJSON {
         return result
     }
 
-    fun getGames(): Array<NewGame>? {
+    private fun getGames(): Array<NewGame>? {
         val request = Request.Builder()
             .url("http://10.0.2.2:5000//games")
             .build()
@@ -53,7 +53,7 @@ object ParseJSON {
         return result
     }
 
-    fun getGamesByLeague(leagueId: Int): Array<NewGame>? {
+    private fun getGamesByLeague(leagueId: Int): Array<NewGame>? {
         val request = Request.Builder()
             .url("http://10.0.2.2:5000//games-by-league/$leagueId")
             .build()
@@ -67,7 +67,7 @@ object ParseJSON {
         return result
     }
 
-    fun getBets(): Array<NewBet>? {
+    private fun getBets(): Array<NewBet>? {
         val request = Request.Builder()
             .url("http://10.0.2.2:5000//bets")
             .build()
@@ -79,5 +79,55 @@ object ParseJSON {
             result = gson.fromJson(response.body!!.string(), Array<NewBet>::class.java)
         }
         return result
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun fetchGames(startupFun: () -> Unit, cleanupFun: () -> Unit,
+                   transferData: (Array<NewGame>?) -> Unit){
+        GlobalScope.launch(Dispatchers.IO){
+            startupFun()
+            val data = async {
+                while (true){
+                    try {
+                        return@async getGames()
+                    } catch (e:Exception) {
+                        when(e){
+                            is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
+                            is java.net.ConnectException,
+                            is java.net.SocketTimeoutException ->
+                                continue
+                            else -> throw e
+                        }
+                    }
+                }
+            }.await() as Array<NewGame>?
+            cleanupFun()
+            transferData(data)
+        }
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun fetchBets(startupFun: () -> Unit, cleanupFun: () -> Unit,
+                  transferData: (Array<NewBet>?) -> Unit){
+        GlobalScope.launch(Dispatchers.IO){
+            startupFun()
+            val data = async {
+                while (true){
+                    try {
+                        return@async getBets()
+                    } catch (e:Exception) {
+                        when(e){
+                            is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
+                            is java.net.ConnectException,
+                            is java.net.SocketTimeoutException ->
+                                continue
+                            else -> throw e
+                        }
+                    }
+                }
+            }.await() as Array<NewBet>?
+            cleanupFun()
+            transferData(data)
+        }
     }
 }
