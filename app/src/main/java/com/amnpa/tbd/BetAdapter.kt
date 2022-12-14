@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_game.view.*
+import kotlinx.android.synthetic.main.bet_card.view.*
 
 class BetAdapter(
     private val games: MutableList<NewBet>,
@@ -17,7 +17,7 @@ class BetAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResultViewHolder {
         return ResultViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.item_game,
+                R.layout.bet_card,
                 parent,
                 false
             )
@@ -28,23 +28,12 @@ class BetAdapter(
     override fun onBindViewHolder(holder: ResultViewHolder, position: Int) {
         val curResult = games[position]
 
-//        holder.itemView.apply {
-//            gamesText.text = curResult. + " vs " + curResult.team2
-//            when(curResult.wasCorrect){
-//                true -> resultImg.setImageResource(R.drawable.ic_baseline_check_circle_24)
-//                false -> resultImg.setImageResource(R.drawable.ic_baseline_cancel_24)
+        holder.itemView.apply {
+            gamesText.text = curResult.gameId.toString() + " vs " + curResult.gameId.toString()
+//            setOnClickListener {
+//                show(curResult.gameId.toString(), curResult.gameId.toString())
 //            }
-//            if(curResult.isUpcoming) {
-//                resultImg.visibility = View.GONE
-//                setOnClickListener {
-//                    show(curResult.team1, curResult.team2)
-//                }
-//            }
-//            else{
-//                resultImg.visibility = View.VISIBLE
-//            }
-//
-//        }
+        }
     }
 
     override fun getItemCount(): Int {
