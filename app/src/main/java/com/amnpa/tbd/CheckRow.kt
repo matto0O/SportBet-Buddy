@@ -1,3 +1,7 @@
 package com.amnpa.tbd
 
-class CheckRow internal constructor(var name: String?, var checked: Boolean = false)
+class CheckRow(var competition: NewCompetition, var checked: Boolean = false){
+    override fun toString(): String {
+        return competition.name
+    }
+}

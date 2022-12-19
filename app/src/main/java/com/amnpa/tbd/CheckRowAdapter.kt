@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.TextView
 
-class CheckRowAdapter(private val dataSet: MutableList<*>, mContext: Context) :
+class CheckRowAdapter(mContext: Context, private val dataSet: List<NewCompetition>) :
     ArrayAdapter<Any?>(mContext, R.layout.row_checkbox, dataSet) {
     private class ViewHolder {
         lateinit var txtName: TextView
@@ -20,7 +20,7 @@ class CheckRowAdapter(private val dataSet: MutableList<*>, mContext: Context) :
     }
 
     override fun getItem(position: Int): CheckRow {
-        return dataSet[position] as CheckRow
+        return CheckRow(dataSet[position])
     }
 
     override fun getView(
@@ -47,7 +47,7 @@ class CheckRowAdapter(private val dataSet: MutableList<*>, mContext: Context) :
         }
 
         val item: CheckRow = getItem(position)
-        viewHolder.txtName.text = item.name
+        viewHolder.txtName.text = item.toString()
         viewHolder.checkBox.isChecked = item.checked
         return result
     }

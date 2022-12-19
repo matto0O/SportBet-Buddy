@@ -2,6 +2,7 @@ package com.amnpa.tbd
 
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -18,6 +19,7 @@ class LeagueFragment : Fragment() {
     private lateinit var listLeagues: ListView
     private lateinit var fragmentContainerView: FragmentContainerView
     private lateinit var loading: ImageView
+    private lateinit var checkRowAdapter: CheckRowAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,10 +33,7 @@ class LeagueFragment : Fragment() {
         buttonCreate = view.findViewById(R.id.buttonCreateLeague)
         listLeagues = view.findViewById(R.id.listViewLeagues)
 
-        listLeagues.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,
-            placeholderLeagues())
-
-        listLeagues.setOnItemClickListener { adapterView, v, position, row ->
+        listLeagues.setOnItemClickListener { _, _, _, row ->
             val popup = layoutInflater.inflate(R.layout.league_status_popup, null)
             val popupWindow = PopupWindow(popup, (view.width * 0.75).toInt(),
                 (view.height * 0.75).toInt(), true)
@@ -50,11 +49,12 @@ class LeagueFragment : Fragment() {
                 popupWindow.dismiss()
             }
 
-            val selected = listLeagues.adapter.getItem(row.toInt()) as League
-            textLeagueCode.text = selected.getCode().toString()
-            textLeagueName.text = selected.getName()
+            val selected = listLeagues.adapter.getItem(row.toInt()) as NewLeague
+            textLeagueCode.text = selected.code
+            textLeagueName.text = selected.code // TODO add name
+           // Log.v("aeee", selected)
             listPlayers.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,
-                selected.orderedPlayers())
+                emptyList<Int>())
 
             popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
         }
@@ -68,18 +68,12 @@ class LeagueFragment : Fragment() {
             val buttonCommit = popup.findViewById<Button>(R.id.buttonCommitLeagueCreation)
             val listEvents = popup.findViewById<ListView>(R.id.listViewChooseEvents)
 
-            val checkRowList = mutableListOf(CheckRow("Ekstraklasa"),
-                CheckRow("Liga Mistrzow"),
-                CheckRow("Mistrzostwa Swiata"),
-                CheckRow("NBA"))
-
-            val adapter = CheckRowAdapter(checkRowList, requireContext())
-            listEvents.adapter = adapter
+            listEvents.adapter = checkRowAdapter
 
             listEvents.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-                val checkRow: CheckRow = checkRowList[position]
+                val checkRow: CheckRow = checkRowAdapter.getItem(position)
                 checkRow.checked = !checkRow.checked
-                adapter.notifyDataSetChanged()
+                checkRowAdapter.notifyDataSetChanged()
             }
 
             buttonCommit.setOnClickListener {
@@ -106,28 +100,13 @@ class LeagueFragment : Fragment() {
         return view
     }
 
-    private fun placeholderLeagues(): MutableList<League>{
-        val leagues = mutableListOf<League>()
-        val thisPlayer = Player("User", 100)
-        val players = mutableSetOf<Player>()
-        for (i in 50 downTo 1){
-            players.add(Player("Player $i", i))
-        }
-        for (i in 5 downTo 1){
-            val league = League("League $i", i)
-            for(j in 10 downTo 1){
-                league.addPlayer(players.random())
-            }
-            league.addPlayer(thisPlayer)
-            leagues.add(league)
-        }
-        return leagues
-    }
-
-
     override fun onStart() {
         fragmentContainerView = requireActivity().findViewById(R.id.fragmentContainerView)
         loading = requireActivity().findViewById(R.id.loadingScreen)
+        ParseJSON.fetchLeagues(
+            ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importLeagues)
+        ParseJSON.fetchCompetitions(
+            ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importCompetitions)
         super.onStart()
     }
 
@@ -148,5 +127,27 @@ class LeagueFragment : Fragment() {
         (loading.drawable as AnimationDrawable).stop()
         fragmentContainerView.alpha = 1F
         loading.alpha=0F
+    }
+
+    private fun importLeagues(data: Array<NewLeague>?){
+            requireActivity().runOnUiThread {
+                listLeagues.adapter = try {
+                    ArrayAdapter(requireContext(),
+                        android.R.layout.simple_list_item_1, data!!.asList())
+                } catch (e: java.lang.NullPointerException) {
+                    ArrayAdapter(requireContext(),
+                        android.R.layout.simple_list_item_1, emptyList<NewLeague>())
+                }
+            }
+    }
+
+    private fun importCompetitions(data: Array<NewCompetition>?){
+        requireActivity().runOnUiThread {
+            checkRowAdapter = try {
+                CheckRowAdapter(requireContext(), data!!.asList())
+            } catch (e: java.lang.NullPointerException) {
+                CheckRowAdapter(requireContext(), emptyList())
+            }
+        }
     }
 }
