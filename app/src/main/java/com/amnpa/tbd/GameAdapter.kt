@@ -1,7 +1,6 @@
 package com.amnpa.tbd
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.game_card.view.*
 
 class GameAdapter(
-    private val games: MutableList<NewGame>,
+    private val games: MutableList<Game>,
     private val show: (String, String) -> Unit
 ) : RecyclerView.Adapter<GameAdapter.ResultViewHolder>() {
 
@@ -42,7 +41,7 @@ class GameAdapter(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun reloadData(newData: List<NewGame>){
+    fun reloadData(newData: List<Game>){
         games.clear()
         games.addAll(newData)
         notifyDataSetChanged()

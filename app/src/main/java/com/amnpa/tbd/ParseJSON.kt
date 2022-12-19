@@ -12,121 +12,137 @@ object ParseJSON {
     private val client = OkHttpClient()
     private val gson = Gson()
 
-    private fun getGroups(): Array<NewLeague>? {
+    private fun getGroups(): Array<League>? {
         val request = Request.Builder()
             .url("http://10.0.2.2:5000//groups-by-user/1")
             .build()
 
-        var result: Array<NewLeague>? = null
+        var result: Array<League>? = null
 
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw IOException("Unexpected code $response")
-            result = gson.fromJson(response.body!!.string(), Array<NewLeague>::class.java)
+            result = gson.fromJson(response.body!!.string(), Array<League>::class.java)
         }
         return result
     }
 
-    private fun getCompetitions(): Array<NewCompetition>? {
+    private fun getCompetitions(): Array<Competition>? {
         val request = Request.Builder()
             .url("http://10.0.2.2:5000//leagues")
             .build()
 
-        var result: Array<NewCompetition>? = null
+        var result: Array<Competition>? = null
 
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw IOException("Unexpected code $response")
-            result = gson.fromJson(response.body!!.string(), Array<NewCompetition>::class.java)
+            result = gson.fromJson(response.body!!.string(), Array<Competition>::class.java)
         }
         return result
     }
 
-    private fun getGames(): Array<NewGame>? {
+    private fun getGames(): Array<Game>? {
         val request = Request.Builder()
             .url("http://10.0.2.2:5000//games")
             .build()
 
-        var result: Array<NewGame>? = null
+        var result: Array<Game>? = null
 
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw IOException("Unexpected code $response")
-            result = gson.fromJson(response.body!!.string(), Array<NewGame>::class.java)
+            result = gson.fromJson(response.body!!.string(), Array<Game>::class.java)
         }
         return result
     }
 
-    private fun getGame(gameId: Int): NewGame? {
+    private fun getGame(gameId: Int): Game? {
         val request = Request.Builder()
             .url("http://10.0.2.2:5000//game/$gameId")
             .build()
 
-        var result: NewGame? = null
+        var result: Game? = null
 
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw IOException("Unexpected code $response")
-            result = gson.fromJson(response.body!!.string(), NewGame::class.java)
+            result = gson.fromJson(response.body!!.string(), Game::class.java)
         }
         return result
     }
 
-    private fun getGamesByCompetition(competitionId: Int): Array<NewGame>? {
+    private fun getGamesByCompetition(competitionId: Int): Array<Game>? {
         val request = Request.Builder()
             .url("http://10.0.2.2:5000//games-by-league/$competitionId")
             .build()
 
-        var result: Array<NewGame>? = null
+        var result: Array<Game>? = null
 
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw IOException("Unexpected code $response")
-            result = gson.fromJson(response.body!!.string(), Array<NewGame>::class.java)
+            result = gson.fromJson(response.body!!.string(), Array<Game>::class.java)
         }
         return result
     }
 
-    private fun getGamesByLeague(leagueId: Int): Array<NewGame>? {
+    private fun getGamesByLeague(leagueId: Int): Array<Game>? {
         val request = Request.Builder()
             .url("http://10.0.2.2:5000//games-by-group/$leagueId")
             .build()
 
-        var result: Array<NewGame>? = null
+        var result: Array<Game>? = null
 
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw IOException("Unexpected code $response")
-            result = gson.fromJson(response.body!!.string(), Array<NewGame>::class.java)
+            result = gson.fromJson(response.body!!.string(), Array<Game>::class.java)
         }
         return result
     }
 
-    private fun getGamesByUser(userId: Int): Array<NewGame>? {
+    private fun getGamesByUser(userId: Int): Array<Game>? {
         val request = Request.Builder()
             .url("http://10.0.2.2:5000//games-by-group/$userId")
             .build()
 
-        var result: Array<NewGame>? = null
+        var result: Array<Game>? = null
 
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw IOException("Unexpected code $response")
-            result = gson.fromJson(response.body!!.string(), Array<NewGame>::class.java)
+            result = gson.fromJson(response.body!!.string(), Array<Game>::class.java)
         }
         return result
     }
 
-    private fun getBets(): Array<NewBet>? {
+    private fun getUsersByLeague(leagueId: Int): Array<Player>? {
+        val request = Request.Builder()
+            .url("http://10.0.2.2:5000//users-by-group/$leagueId")
+            .build()
+
+        var result: Array<Player>? = null
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+            val str = response.body!!.string()
+            Log.v("czemu", str)
+            result = gson.fromJson(str, Array<Player>::class.java)
+        }
+        return result
+    }
+
+    private fun getBets(): Array<Bet>? {
         val request = Request.Builder()
             .url("http://10.0.2.2:5000//bets")
             .build()
 
-        var result: Array<NewBet>? = null
+        var result: Array<Bet>? = null
 
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw IOException("Unexpected code $response")
-            result = gson.fromJson(response.body!!.string(), Array<NewBet>::class.java)
+            result = gson.fromJson(response.body!!.string(), Array<Bet>::class.java)
         }
         return result
     }
 
     @OptIn(DelicateCoroutinesApi::class)
     fun fetchGames(startupFun: () -> Unit, cleanupFun: () -> Unit,
-                   transferData: (Array<NewGame>?) -> Unit){
+                   transferData: (Array<Game>?) -> Unit){
         GlobalScope.launch(Dispatchers.IO){
             startupFun()
             val data = async {
@@ -143,7 +159,7 @@ object ParseJSON {
                         }
                     }
                 }
-            }.await() as Array<NewGame>?
+            }.await() as Array<Game>?
             cleanupFun()
             transferData(data)
         }
@@ -151,7 +167,7 @@ object ParseJSON {
 
     @OptIn(DelicateCoroutinesApi::class)
     fun fetchBets(startupFun: () -> Unit, cleanupFun: () -> Unit,
-                  transferData: (Array<NewBet>?) -> Unit){
+                  transferData: (Array<Bet>?) -> Unit){
         GlobalScope.launch(Dispatchers.IO){
             startupFun()
             val data = async {
@@ -168,7 +184,7 @@ object ParseJSON {
                         }
                     }
                 }
-            }.await() as Array<NewBet>?
+            }.await() as Array<Bet>?
             cleanupFun()
             transferData(data)
         }
@@ -176,7 +192,7 @@ object ParseJSON {
 
     @OptIn(DelicateCoroutinesApi::class)
     fun fetchCompetitions(startupFun: () -> Unit, cleanupFun: () -> Unit,
-                  transferData: (Array<NewCompetition>?) -> Unit){
+                  transferData: (Array<Competition>?) -> Unit){
         GlobalScope.launch(Dispatchers.IO){
             startupFun()
             val data = async {
@@ -193,7 +209,7 @@ object ParseJSON {
                         }
                     }
                 }
-            }.await() as Array<NewCompetition>?
+            }.await() as Array<Competition>?
             cleanupFun()
             transferData(data)
         }
@@ -201,7 +217,7 @@ object ParseJSON {
 
     @OptIn(DelicateCoroutinesApi::class)
     fun fetchGamesByCompetition(competitionId: Int, startupFun: () -> Unit, cleanupFun: () -> Unit,
-                          transferData: (Array<NewGame>?) -> Unit){
+                          transferData: (Array<Game>?) -> Unit){
         GlobalScope.launch(Dispatchers.IO){
             startupFun()
             val data = async {
@@ -218,7 +234,7 @@ object ParseJSON {
                         }
                     }
                 }
-            }.await() as Array<NewGame>?
+            }.await() as Array<Game>?
             cleanupFun()
             transferData(data)
         }
@@ -226,7 +242,7 @@ object ParseJSON {
 
     @OptIn(DelicateCoroutinesApi::class)
     fun fetchGamesByLeague(leagueId: Int, startupFun: () -> Unit, cleanupFun: () -> Unit,
-                           transferData: (Array<NewGame>?) -> Unit){
+                           transferData: (Array<Game>?) -> Unit){
         GlobalScope.launch(Dispatchers.IO){
             startupFun()
             val data = async {
@@ -243,7 +259,7 @@ object ParseJSON {
                         }
                     }
                 }
-            }.await() as Array<NewGame>?
+            }.await() as Array<Game>?
             cleanupFun()
             transferData(data)
         }
@@ -251,7 +267,7 @@ object ParseJSON {
 
     @OptIn(DelicateCoroutinesApi::class)
     fun fetchGamesByUser(userId: Int, startupFun: () -> Unit, cleanupFun: () -> Unit,
-                           transferData: (Array<NewGame>?) -> Unit){
+                           transferData: (Array<Game>?) -> Unit){
         GlobalScope.launch(Dispatchers.IO){
             startupFun()
             val data = async {
@@ -268,7 +284,36 @@ object ParseJSON {
                         }
                     }
                 }
-            }.await() as Array<NewGame>?
+            }.await() as Array<Game>?
+            cleanupFun()
+            transferData(data)
+        }
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun fetchUsersByLeague(leagueId: Int, startupFun: () -> Unit, cleanupFun: () -> Unit,
+                         transferData: (Array<Player>?) -> Unit){
+        GlobalScope.launch(Dispatchers.IO){
+            startupFun()
+            val data = async {
+                while (true){
+                    try {
+                        return@async getUsersByLeague(leagueId)
+                    } catch (e:Exception) {
+                        when(e){
+                            is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
+                            is java.net.ConnectException,
+                            is java.net.SocketTimeoutException ->
+                                continue
+                            is IOException ->
+                            {
+                                return@async null
+                            }
+                            else -> throw e
+                        }
+                    }
+                }
+            }.await() as Array<Player>?
             cleanupFun()
             transferData(data)
         }
@@ -276,7 +321,7 @@ object ParseJSON {
 
     @OptIn(DelicateCoroutinesApi::class)
     fun fetchLeagues(startupFun: () -> Unit, cleanupFun: () -> Unit,
-                     transferData: (Array<NewLeague>?) -> Unit){
+                     transferData: (Array<League>?) -> Unit){
         GlobalScope.launch(Dispatchers.IO){
             startupFun()
             val data = async {
@@ -293,7 +338,7 @@ object ParseJSON {
                         }
                     }
                 }
-            }.await() as Array<NewLeague>?
+            }.await() as Array<League>?
             cleanupFun()
             transferData(data)
         }
@@ -301,7 +346,7 @@ object ParseJSON {
 
     @OptIn(DelicateCoroutinesApi::class)
     fun fetchGame(gameId: Int, startupFun: () -> Unit, cleanupFun: () -> Unit,
-                  transferData: (NewGame?) -> Unit){
+                  transferData: (Game?) -> Unit){
         GlobalScope.launch(Dispatchers.IO){
             startupFun()
             val data = async {
@@ -318,7 +363,7 @@ object ParseJSON {
                         }
                     }
                 }
-            }.await() as NewGame?
+            }.await() as Game?
             cleanupFun()
             transferData(data)
         }

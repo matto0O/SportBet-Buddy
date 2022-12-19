@@ -49,6 +49,8 @@ class GamesFragment : Fragment() {
             popup.findViewById<TextView>(R.id.selectDraw)
                 .setOnClickListener { popupWindow.dismiss() }
 
+            // TODO Make buttons post bets onto the database
+
             popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
 
         }
@@ -110,7 +112,7 @@ class GamesFragment : Fragment() {
         loading.alpha=0F
     }
 
-    private fun importGames(data: Array<NewGame>?){
+    private fun importGames(data: Array<Game>?){
         requireActivity().runOnUiThread {
             try {
                 gameAdapter.reloadData(data!!.asList())
@@ -120,7 +122,7 @@ class GamesFragment : Fragment() {
         }
     }
 
-    private fun importBets(data: Array<NewBet>?){
+    private fun importBets(data: Array<Bet>?){
         requireActivity().runOnUiThread {
             try {
                 betAdapter.reloadData(data!!.asList())

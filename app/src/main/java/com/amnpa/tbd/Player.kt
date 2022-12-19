@@ -1,20 +1,19 @@
 package com.amnpa.tbd
 
-import kotlin.random.Random
+import com.google.gson.annotations.SerializedName
 
-class Player (private var name:String, private val id:Int){
+data class Player (@SerializedName("login") val name:String,
+                   @SerializedName("id") val playerId:Int,
+                   val bets: List<Int>,
+                   @SerializedName("memberships") val leagues: List<Int>){
 
-    private var score = Random.nextInt(0, 50)
+    private fun getScore():Int{
+        // TODO implement getting players' score
 
-    fun getScore():Int{
-        return score
-    }
-
-    override fun equals(other: Any?): Boolean {
-        return (other as Player).id != this.id
+        return 0
     }
 
     override fun toString(): String {
-        return "$name - $score"
+        return "$name - ${getScore()}"
     }
 }

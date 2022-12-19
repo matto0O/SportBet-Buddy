@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.bet_card.view.*
 
 class BetAdapter(
-    private val games: MutableList<NewBet>,
+    private val games: MutableList<Bet>,
     private val show: (String, String) -> Unit
 ) : RecyclerView.Adapter<BetAdapter.ResultViewHolder>() {
 
@@ -41,7 +41,7 @@ class BetAdapter(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun reloadData(newData: List<NewBet>){
+    fun reloadData(newData: List<Bet>){
         games.clear()
         games.addAll(newData)
         notifyDataSetChanged()

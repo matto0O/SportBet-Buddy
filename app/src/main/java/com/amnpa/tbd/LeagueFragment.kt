@@ -2,7 +2,6 @@ package com.amnpa.tbd
 
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -20,6 +19,7 @@ class LeagueFragment : Fragment() {
     private lateinit var fragmentContainerView: FragmentContainerView
     private lateinit var loading: ImageView
     private lateinit var checkRowAdapter: CheckRowAdapter
+    private lateinit var listPlayers: ListView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,7 +33,7 @@ class LeagueFragment : Fragment() {
         buttonCreate = view.findViewById(R.id.buttonCreateLeague)
         listLeagues = view.findViewById(R.id.listViewLeagues)
 
-        listLeagues.setOnItemClickListener { _, _, _, row ->
+        listLeagues.setOnItemClickListener { _, _, position, _ ->
             val popup = layoutInflater.inflate(R.layout.league_status_popup, null)
             val popupWindow = PopupWindow(popup, (view.width * 0.75).toInt(),
                 (view.height * 0.75).toInt(), true)
@@ -41,22 +41,26 @@ class LeagueFragment : Fragment() {
             val textLeagueCode = popup.findViewById<TextView>(R.id.textViewLeagueCode)
             val textLeagueName = popup.findViewById<TextView>(R.id.textViewLeagueName)
             val buttonQuit = popup.findViewById<Button>(R.id.buttonQuitLeague)
-            val listPlayers = popup.findViewById<ListView>(R.id.listViewPlayers)
+            listPlayers = popup.findViewById(R.id.listViewPlayers)
 
             buttonQuit.setOnClickListener {
                 Toast.makeText(context, "Left ${textLeagueName.text}", Toast.LENGTH_SHORT)
                     .show()
+                // TODO real implementation of leaving the league
                 popupWindow.dismiss()
             }
 
-            val selected = listLeagues.adapter.getItem(row.toInt()) as NewLeague
-            textLeagueCode.text = selected.code
-            textLeagueName.text = selected.code // TODO add name
+            val selected = listLeagues.adapter.getItem(position) as League
+            textLeagueCode.text = selected.leagueCode
+            textLeagueName.text = selected.leagueCode // TODO add name
            // Log.v("aeee", selected)
-            listPlayers.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,
-                emptyList<Int>())
+            ParseJSON.fetchUsersByLeague(
+                (listLeagues.adapter.getItem(position) as League).leagueId,
+                ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importStandings)
 
             popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
+
+            // TODO browse players' bets onclick
         }
 
         buttonCreate.setOnClickListener {
@@ -129,24 +133,36 @@ class LeagueFragment : Fragment() {
         loading.alpha=0F
     }
 
-    private fun importLeagues(data: Array<NewLeague>?){
+    private fun importLeagues(data: Array<League>?){
             requireActivity().runOnUiThread {
                 listLeagues.adapter = try {
                     ArrayAdapter(requireContext(),
                         android.R.layout.simple_list_item_1, data!!.asList())
                 } catch (e: java.lang.NullPointerException) {
                     ArrayAdapter(requireContext(),
-                        android.R.layout.simple_list_item_1, emptyList<NewLeague>())
+                        android.R.layout.simple_list_item_1, emptyList<League>())
                 }
             }
     }
 
-    private fun importCompetitions(data: Array<NewCompetition>?){
+    private fun importCompetitions(data: Array<Competition>?){
         requireActivity().runOnUiThread {
             checkRowAdapter = try {
                 CheckRowAdapter(requireContext(), data!!.asList())
             } catch (e: java.lang.NullPointerException) {
                 CheckRowAdapter(requireContext(), emptyList())
+            }
+        }
+    }
+
+    private fun importStandings(data: Array<Player>?){
+        requireActivity().runOnUiThread {
+            listPlayers.adapter = try {
+                 ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,
+                    data!!.asList())
+            } catch (e: java.lang.NullPointerException) {
+                ArrayAdapter(requireContext(),
+                    android.R.layout.simple_list_item_1, emptyList<Player>())
             }
         }
     }

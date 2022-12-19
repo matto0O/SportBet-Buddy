@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.TextView
 
-class CheckRowAdapter(mContext: Context, private val dataSet: List<NewCompetition>) :
+class CheckRowAdapter(mContext: Context, private val dataSet: List<Competition>) :
     ArrayAdapter<Any?>(mContext, R.layout.row_checkbox, dataSet) {
     private class ViewHolder {
         lateinit var txtName: TextView

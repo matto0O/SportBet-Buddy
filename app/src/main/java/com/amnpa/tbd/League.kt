@@ -1,29 +1,12 @@
 package com.amnpa.tbd
 
-class League(private var name: String, private var code: Int) {
-    private val participants = mutableSetOf<Player>()
+import com.google.gson.annotations.SerializedName
 
-    fun addPlayer(player: Player){
-        participants.add(player)
-    }
-
-    fun getSize(): Int{
-        return participants.size
-    }
-
-    fun orderedPlayers(): List<Player>{
-        return participants.toList().sortedBy { -it.getScore() }
-    }
-
-    fun getName(): String{
-        return name
-    }
-
-    fun getCode(): Int{
-        return code
-    }
-
+data class League (@SerializedName("code") val leagueCode:String,
+                   @SerializedName("id") val leagueId:Int,
+                   @SerializedName("leagues") val competitions: List<Int>,
+                   @SerializedName("members") val players: List<Int>){
     override fun toString(): String {
-        return name
+        return "$leagueCode - $leagueId"
     }
 }
