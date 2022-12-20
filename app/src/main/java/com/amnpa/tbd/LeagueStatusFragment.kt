@@ -9,12 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.FragmentContainerView
+import androidx.navigation.fragment.navArgs
 
 class LeagueStatusFragment : Fragment() {
 
     private lateinit var fragmentContainerView: FragmentContainerView
     private lateinit var loading: ImageView
     private lateinit var listPlayers: ListView
+    private val args by navArgs<LeagueStatusFragmentArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,7 +40,7 @@ class LeagueStatusFragment : Fragment() {
             // TODO real implementation of leaving the league
         }
 
-        val selected = requireArguments().getSerializable("LEAGUE_ARG") as League
+        val selected = args.league
         textLeagueCode.text = selected.leagueCode
         textLeagueName.text = selected.leagueCode // TODO add name
         ParseJSON.fetchUsersByLeague(

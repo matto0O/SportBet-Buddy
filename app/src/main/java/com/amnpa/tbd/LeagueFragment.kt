@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.commit
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import java.io.Serializable
 
 class LeagueFragment : Fragment() {
@@ -38,17 +39,9 @@ class LeagueFragment : Fragment() {
         listLeagues = view.findViewById(R.id.listViewLeagues)
 
         listLeagues.setOnItemClickListener { _, _, position, _ ->
-            val bundle = Bundle()
-            bundle.putSerializable("LEAGUE_ARG",
-                listLeagues.adapter.getItem(position) as Serializable?
-            )
-
-            parentFragmentManager.commit {
-                replace(R.id.leagueFragment, LeagueStatusFragment::class.java, bundle)
-            }
-
-//            Navigation.findNavController(view).navigate(
-//                R.id.action_leagueFragment_to_leagueStandingsFragment)
+            val action = LeagueFragmentDirections.actionLeagueFragmentToLeagueStandingsFragment(
+                listLeagues.adapter.getItem(position) as League)
+            findNavController().navigate(action)
         }
 
         buttonCreate.setOnClickListener {
