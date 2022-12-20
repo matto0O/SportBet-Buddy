@@ -8,7 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentContainerView
+import androidx.fragment.app.commit
+import androidx.navigation.Navigation
+import java.io.Serializable
 
 class LeagueFragment : Fragment() {
 
@@ -34,33 +38,17 @@ class LeagueFragment : Fragment() {
         listLeagues = view.findViewById(R.id.listViewLeagues)
 
         listLeagues.setOnItemClickListener { _, _, position, _ ->
-            val popup = layoutInflater.inflate(R.layout.league_status_popup, null)
-            val popupWindow = PopupWindow(popup, (view.width * 0.75).toInt(),
-                (view.height * 0.75).toInt(), true)
+            val bundle = Bundle()
+            bundle.putSerializable("LEAGUE_ARG",
+                listLeagues.adapter.getItem(position) as Serializable?
+            )
 
-            val textLeagueCode = popup.findViewById<TextView>(R.id.textViewLeagueCode)
-            val textLeagueName = popup.findViewById<TextView>(R.id.textViewLeagueName)
-            val buttonQuit = popup.findViewById<Button>(R.id.buttonQuitLeague)
-            listPlayers = popup.findViewById(R.id.listViewPlayers)
-
-            buttonQuit.setOnClickListener {
-                Toast.makeText(context, "Left ${textLeagueName.text}", Toast.LENGTH_SHORT)
-                    .show()
-                // TODO real implementation of leaving the league
-                popupWindow.dismiss()
+            parentFragmentManager.commit {
+                replace(R.id.leagueFragment, LeagueStatusFragment::class.java, bundle)
             }
 
-            val selected = listLeagues.adapter.getItem(position) as League
-            textLeagueCode.text = selected.leagueCode
-            textLeagueName.text = selected.leagueCode // TODO add name
-           // Log.v("aeee", selected)
-            ParseJSON.fetchUsersByLeague(
-                (listLeagues.adapter.getItem(position) as League).leagueId,
-                ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importStandings)
-
-            popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
-
-            // TODO browse players' bets onclick
+//            Navigation.findNavController(view).navigate(
+//                R.id.action_leagueFragment_to_leagueStandingsFragment)
         }
 
         buttonCreate.setOnClickListener {
@@ -151,18 +139,6 @@ class LeagueFragment : Fragment() {
                 CheckRowAdapter(requireContext(), data!!.asList())
             } catch (e: java.lang.NullPointerException) {
                 CheckRowAdapter(requireContext(), emptyList())
-            }
-        }
-    }
-
-    private fun importStandings(data: Array<Player>?){
-        requireActivity().runOnUiThread {
-            listPlayers.adapter = try {
-                 ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,
-                    data!!.asList())
-            } catch (e: java.lang.NullPointerException) {
-                ArrayAdapter(requireContext(),
-                    android.R.layout.simple_list_item_1, emptyList<Player>())
             }
         }
     }
