@@ -119,9 +119,7 @@ object ParseJSON {
 
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw IOException("Unexpected code $response")
-            val str = response.body!!.string()
-            Log.v("czemu", str)
-            result = gson.fromJson(str, Array<Player>::class.java)
+            result = gson.fromJson(response.body!!.string(), Array<Player>::class.java)
         }
         return result
     }
@@ -129,6 +127,20 @@ object ParseJSON {
     private fun getBets(): Array<Bet>? {
         val request = Request.Builder()
             .url("http://10.0.2.2:5000//bets")
+            .build()
+
+        var result: Array<Bet>? = null
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+            result = gson.fromJson(response.body!!.string(), Array<Bet>::class.java)
+        }
+        return result
+    }
+
+    private fun getBetsByUserAndLeague(userId: Int, leagueId: Int): Array<Bet>? {
+        val request = Request.Builder()
+            .url("http://10.0.2.2:5000//bets-by-player-and-group/$userId/$leagueId")
             .build()
 
         var result: Array<Bet>? = null
@@ -286,6 +298,32 @@ object ParseJSON {
                 }
             }.await() as Array<Game>?
             cleanupFun()
+            transferData(data)
+        }
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun fetchBetsByLeagueAndPlayer(userId: Int, leagueId: Int,
+                                   //startupFun: () -> Unit, cleanupFun: () -> Unit,
+                                    transferData: (Array<Bet>?) -> Unit){
+        GlobalScope.launch(Dispatchers.IO){
+            //startupFun()
+            val data = async {
+                while (true){
+                    try {
+                        return@async getBetsByUserAndLeague(userId, leagueId)
+                    } catch (e:Exception) {
+                        when(e){
+                            is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
+                            is java.net.ConnectException,
+                            is java.net.SocketTimeoutException ->
+                                continue
+                            else -> throw e
+                        }
+                    }
+                }
+            }.await() as Array<Bet>?
+            //cleanupFun()
             transferData(data)
         }
     }

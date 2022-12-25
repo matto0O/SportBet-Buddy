@@ -9,26 +9,22 @@
         android:id="@+id/gamesFragment"
         android:name="com.amnpa.tbd.GamesFragment"
         android:label="fragment_games"
-        tools:layout="@layout/fragment_games" >
-    </fragment>
+        tools:layout="@layout/fragment_games" />
 
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.amnpa.tbd.SettingsFragment"
-        android:label="SettingsFragment" >
-    </fragment>
+        android:label="SettingsFragment" />
 
     <fragment
         android:id="@+id/leagueFragment"
         android:name="com.amnpa.tbd.LeagueFragment"
         android:label="fragment_league"
-        tools:layout="@layout/fragment_league" >
-    </fragment>
+        tools:layout="@layout/fragment_league"/>
 
     <fragment
         android:id="@+id/statsFragment"
         android:name="com.amnpa.tbd.StatsFragment"
         android:label="fragment_stats"
-        tools:layout="@layout/fragment_stats" >
-    </fragment>
+        tools:layout="@layout/fragment_stats" /><action android:id="@+id/action_global_statsFragment" app:destination="@id/statsFragment"/><action android:id="@+id/action_global_leagueFragment" app:destination="@id/leagueFragment"/><action android:id="@+id/action_global_gamesFragment" app:destination="@id/gamesFragment"/><action android:id="@+id/action_global_settingsFragment" app:destination="@id/settingsFragment"/>
 </navigation>

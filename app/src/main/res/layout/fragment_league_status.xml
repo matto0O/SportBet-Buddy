@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_popup"
+    tools:context=".LeagueStatusFragment">
+
+<!--        android:background="@drawable/background_popup"
     android:backgroundTintMode="add"
-    android:backgroundTint="@color/app_main"
-    tools:context=".LeagueFragment">
+    android:backgroundTint="@color/app_main"-->
 
     <TextView
         android:id="@+id/textViewLeagueCode"

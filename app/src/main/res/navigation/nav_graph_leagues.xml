@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_leagues"
+    app:startDestination="@id/leagueOverviewFragment">
+
+    <fragment
+        android:id="@+id/leagueOverviewFragment"
+        android:name="com.amnpa.tbd.LeagueOverviewFragment"
+        android:label="fragment_league_overview"
+        tools:layout="@layout/fragment_league_overview" >
+        <action
+            android:id="@+id/action_leagueOverviewFragment_to_leagueStatusFragment"
+            app:destination="@id/leagueStatusFragment" />
+        <action
+            android:id="@+id/action_leagueOverviewFragment_to_leagueCreateFragment"
+            app:destination="@id/leagueCreateFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/leagueStatusFragment"
+        android:name="com.amnpa.tbd.LeagueStatusFragment"
+        android:label="fragment_league_status"
+        tools:layout="@layout/fragment_league_status" >
+        <argument
+            android:name="league"
+            app:argType="com.amnpa.tbd.League" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_leagueOverviewFragment"
+        app:destination="@id/leagueOverviewFragment" />
+    <fragment
+        android:id="@+id/leagueCreateFragment"
+        android:name="com.amnpa.tbd.LeagueCreateFragment"
+        android:label="fragment_league_create"
+        tools:layout="@layout/fragment_league_create" />
+</navigation>
