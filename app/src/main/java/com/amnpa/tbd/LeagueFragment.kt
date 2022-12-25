@@ -1,138 +1,21 @@
 package com.amnpa.tbd
 
-import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
-import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentContainerView
-import androidx.fragment.app.commit
-import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
-import java.io.Serializable
 
 class LeagueFragment : Fragment() {
-
-    private lateinit var textEnterCode:EditText
-    private lateinit var buttonJoin:Button
-    private lateinit var buttonCreate:Button
-    private lateinit var listLeagues: ListView
-    private lateinit var fragmentContainerView: FragmentContainerView
-    private lateinit var loading: ImageView
-    private lateinit var checkRowAdapter: CheckRowAdapter
-    private lateinit var listPlayers: ListView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        val view = inflater.inflate(R.layout.fragment_league, container, false)
-
-        textEnterCode = view.findViewById(R.id.editTextEnterCode)
-        buttonJoin = view.findViewById(R.id.buttonJoinLeague)
-        buttonCreate = view.findViewById(R.id.buttonCreateLeague)
-        listLeagues = view.findViewById(R.id.listViewLeagues)
-
-        listLeagues.setOnItemClickListener { _, _, position, _ ->
-            val action = LeagueFragmentDirections.actionLeagueFragmentToLeagueStandingsFragment(
-                listLeagues.adapter.getItem(position) as League)
-            findNavController().navigate(action)
-        }
-
-        buttonCreate.setOnClickListener {
-            val popup = layoutInflater.inflate(R.layout.league_creator_popup, null)
-            val popupWindow = PopupWindow(popup, (view.width * 0.75).toInt(),
-                    (view.height * 0.75).toInt(), true)
-
-            val textLeagueName = popup.findViewById<EditText>(R.id.editTextLeagueName)
-            val buttonCommit = popup.findViewById<Button>(R.id.buttonCommitLeagueCreation)
-            val listEvents = popup.findViewById<ListView>(R.id.listViewChooseEvents)
-
-            listEvents.adapter = checkRowAdapter
-
-            listEvents.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-                val checkRow: CheckRow = checkRowAdapter.getItem(position)
-                checkRow.checked = !checkRow.checked
-                checkRowAdapter.notifyDataSetChanged()
-            }
-
-            buttonCommit.setOnClickListener {
-                if (textLeagueName.text.toString().length < 3)
-                    Toast.makeText(context, "Invalid league name", Toast.LENGTH_SHORT).show()
-                else {
-                    Toast.makeText(context, "Created ${textLeagueName.text}",
-                            Toast.LENGTH_SHORT).show()
-                    popupWindow.dismiss()
-                }
-            }
-
-            popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
-        }
-
-        buttonJoin.setOnClickListener{
-            if (textEnterCode.text.toString() == "")
-                Toast.makeText(context, "Invalid league code", Toast.LENGTH_SHORT).show()
-            else
-                Toast.makeText(context, "TODO: joined a league of code: "
-                        +textEnterCode.text.toString(), Toast.LENGTH_SHORT).show()
-        }
-
-        return view
+        return inflater.inflate(R.layout.fragment_league, container, false)
     }
 
-    override fun onStart() {
-        fragmentContainerView = requireActivity().findViewById(R.id.fragmentContainerView)
-        loading = requireActivity().findViewById(R.id.loadingScreen)
-        ParseJSON.fetchLeagues(
-            ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importLeagues)
-        ParseJSON.fetchCompetitions(
-            ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importCompetitions)
-        super.onStart()
-    }
-
-    override fun onStop() {
-        (loading.drawable as AnimationDrawable).stop()
-        fragmentContainerView.alpha = 1F
-        loading.alpha=0F
-        super.onStop()
-    }
-
-    private fun triggerLoadingScreen(){
-        fragmentContainerView.alpha = 0.2F
-        loading.alpha=1F
-        (loading.drawable as AnimationDrawable).start()
-    }
-
-    private fun dissolveLoadingScreen(){
-        (loading.drawable as AnimationDrawable).stop()
-        fragmentContainerView.alpha = 1F
-        loading.alpha=0F
-    }
-
-    private fun importLeagues(data: Array<League>?){
-            requireActivity().runOnUiThread {
-                listLeagues.adapter = try {
-                    ArrayAdapter(requireContext(),
-                        android.R.layout.simple_list_item_1, data!!.asList())
-                } catch (e: java.lang.NullPointerException) {
-                    ArrayAdapter(requireContext(),
-                        android.R.layout.simple_list_item_1, emptyList<League>())
-                }
-            }
-    }
-
-    private fun importCompetitions(data: Array<Competition>?){
-        requireActivity().runOnUiThread {
-            checkRowAdapter = try {
-                CheckRowAdapter(requireContext(), data!!.asList())
-            } catch (e: java.lang.NullPointerException) {
-                CheckRowAdapter(requireContext(), emptyList())
-            }
-        }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(null)
     }
 }

@@ -9,86 +9,22 @@
         android:id="@+id/gamesFragment"
         android:name="com.amnpa.tbd.GamesFragment"
         android:label="fragment_games"
-        tools:layout="@layout/fragment_games" >
-        <action
-            android:id="@+id/action_gamesFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
-        <action
-            android:id="@+id/action_gamesFragment_to_leagueFragment"
-            app:destination="@id/leagueFragment" />
-        <action
-            android:id="@+id/action_gamesFragment_to_statsFragment"
-            app:destination="@id/statsFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_games" />
 
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.amnpa.tbd.SettingsFragment"
-        android:label="SettingsFragment" >
-        <action
-            android:id="@+id/action_settingsFragment_to_gamesFragment"
-            app:destination="@id/gamesFragment" />
-        <action
-            android:id="@+id/action_settingsFragment_to_leagueFragment"
-            app:destination="@id/leagueFragment" />
-        <action
-            android:id="@+id/action_settingsFragment_to_statsFragment"
-            app:destination="@id/statsFragment" />
-    </fragment>
+        android:label="SettingsFragment" />
 
     <fragment
         android:id="@+id/leagueFragment"
         android:name="com.amnpa.tbd.LeagueFragment"
         android:label="fragment_league"
-        tools:layout="@layout/fragment_league">
-        <action
-            android:id="@+id/action_leagueFragment_to_gamesFragment"
-            app:destination="@id/gamesFragment" />
-        <action
-            android:id="@+id/action_leagueFragment_to_statsFragment"
-            app:destination="@id/statsFragment" />
-        <action
-            android:id="@+id/action_leagueFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
-        <action
-            android:id="@+id/action_leagueFragment_to_leagueStandingsFragment"
-            app:destination="@id/leagueStandingsFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_league"/>
 
     <fragment
         android:id="@+id/statsFragment"
         android:name="com.amnpa.tbd.StatsFragment"
         android:label="fragment_stats"
-        tools:layout="@layout/fragment_stats" >
-        <action
-            android:id="@+id/action_statsFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
-        <action
-            android:id="@+id/action_statsFragment_to_gamesFragment"
-            app:destination="@id/gamesFragment" />
-        <action
-            android:id="@+id/action_statsFragment_to_leagueFragment"
-            app:destination="@id/leagueFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/leagueStandingsFragment"
-        android:name="com.amnpa.tbd.LeagueStatusFragment"
-        android:label="fragment_league_standings"
-        tools:layout="@layout/fragment_league_status" >
-        <action
-            android:id="@+id/action_leagueStandingsFragment_to_leagueFragment"
-            app:destination="@id/leagueFragment" />
-        <action
-            android:id="@+id/action_leagueStandingsFragment_to_statsFragment"
-            app:destination="@id/statsFragment" />
-        <action
-            android:id="@+id/action_leagueStandingsFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
-        <action
-            android:id="@+id/action_leagueStandingsFragment_to_gamesFragment"
-            app:destination="@id/gamesFragment" />
-        <argument
-            android:name="league"
-            app:argType="com.amnpa.tbd.League" />
-    </fragment>
+        tools:layout="@layout/fragment_stats" /><action android:id="@+id/action_global_statsFragment" app:destination="@id/statsFragment"/><action android:id="@+id/action_global_leagueFragment" app:destination="@id/leagueFragment"/><action android:id="@+id/action_global_gamesFragment" app:destination="@id/gamesFragment"/><action android:id="@+id/action_global_settingsFragment" app:destination="@id/settingsFragment"/>
 </navigation>

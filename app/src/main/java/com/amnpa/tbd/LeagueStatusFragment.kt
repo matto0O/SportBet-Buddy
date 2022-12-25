@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.FragmentContainerView
+import androidx.fragment.app.FragmentManager
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 
 class LeagueStatusFragment : Fragment() {
@@ -17,6 +19,7 @@ class LeagueStatusFragment : Fragment() {
     private lateinit var loading: ImageView
     private lateinit var listPlayers: ListView
     private val args by navArgs<LeagueStatusFragmentArgs>()
+    private lateinit var _fragmentManager: FragmentManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,6 +27,7 @@ class LeagueStatusFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
 
+        _fragmentManager = requireActivity().supportFragmentManager
         fragmentContainerView = requireActivity().findViewById(R.id.fragmentContainerView)
         loading = requireActivity().findViewById(R.id.loadingScreen)
 
@@ -53,9 +57,9 @@ class LeagueStatusFragment : Fragment() {
     }
 
     override fun onStart() {
+        super.onStart()
         fragmentContainerView = requireActivity().findViewById(R.id.fragmentContainerView)
         loading = requireActivity().findViewById(R.id.loadingScreen)
-       super.onStart()
     }
 
     override fun onStop() {
