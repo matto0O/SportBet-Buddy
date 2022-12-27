@@ -10,7 +10,6 @@ import kotlinx.android.synthetic.main.bet_card.view.*
 
 class BetAdapter(
     private val games: MutableList<Bet>,
-    private val show: (String, String) -> Unit
 ) : RecyclerView.Adapter<BetAdapter.ResultViewHolder>() {
 
     class ResultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -30,7 +29,7 @@ class BetAdapter(
         val curResult = games[position]
 
         holder.itemView.apply {
-            gamesText.text = curResult.game.team1 + " vs " + curResult.game.team2
+            textStatDescription.text = curResult.game.team1 + " vs " + curResult.game.team2
 //            setOnClickListener {
 //                show(curResult.gameId.toString(), curResult.gameId.toString())
 //            }

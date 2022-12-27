@@ -6,7 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".viewmodel.PlayerFragment">
 
-       <RelativeLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/statRecView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+
+    <RelativeLayout
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -103,7 +113,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/relativeLayout" />
+        app:layout_constraintTop_toBottomOf="@id/statRecView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

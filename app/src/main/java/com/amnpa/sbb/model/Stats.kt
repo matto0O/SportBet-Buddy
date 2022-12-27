@@ -20,7 +20,7 @@ object Stats {
         // TODO fetch stats
     }
 
-    fun randomStats(amount: Int): List<Pair<String, Any>>{
+    fun randomStats(amount: Int = map.size): List<Pair<String, Any>>{
         val list = map.toList()
         while(list.size > amount){
             list.drop(Random.nextInt(list.size-1))
