@@ -1,4 +1,4 @@
-package com.amnpa.tbd
+package com.amnpa.sbb.viewmodel
 
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.amnpa.sbb.R
+import com.amnpa.sbb.model.*
 
 
 class GamesFragment : Fragment() {

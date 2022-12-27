@@ -1,8 +1,7 @@
-package com.amnpa.tbd
+package com.amnpa.sbb.viewmodel
 
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,8 +9,10 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.FragmentManager
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.amnpa.sbb.R
+import com.amnpa.sbb.model.ParseJSON
+import com.amnpa.sbb.model.Player
 
 class LeagueStatusFragment : Fragment() {
 

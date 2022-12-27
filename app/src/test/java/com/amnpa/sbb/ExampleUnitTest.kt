@@ -1,4 +1,4 @@
-package com.amnpa.tbd
+package com.amnpa.sbb
 
 import org.junit.Test
 

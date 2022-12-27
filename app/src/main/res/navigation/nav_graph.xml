@@ -4,27 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph.xml"
     app:startDestination="@id/gamesFragment">
-
     <fragment
         android:id="@+id/gamesFragment"
-        android:name="com.amnpa.tbd.GamesFragment"
+        android:name="com.amnpa.sbb.viewmodel.GamesFragment"
         android:label="fragment_games"
         tools:layout="@layout/fragment_games" />
-
-    <fragment
-        android:id="@+id/settingsFragment"
-        android:name="com.amnpa.tbd.SettingsFragment"
-        android:label="SettingsFragment" />
-
     <fragment
         android:id="@+id/leagueFragment"
-        android:name="com.amnpa.tbd.LeagueFragment"
+        android:name="com.amnpa.sbb.viewmodel.LeagueFragment"
         android:label="fragment_league"
-        tools:layout="@layout/fragment_league"/>
-
+        tools:layout="@layout/fragment_league" />
     <fragment
         android:id="@+id/statsFragment"
-        android:name="com.amnpa.tbd.StatsFragment"
+        android:name="com.amnpa.sbb.viewmodel.StatsFragment"
         android:label="fragment_stats"
-        tools:layout="@layout/fragment_stats" /><action android:id="@+id/action_global_statsFragment" app:destination="@id/statsFragment"/><action android:id="@+id/action_global_leagueFragment" app:destination="@id/leagueFragment"/><action android:id="@+id/action_global_gamesFragment" app:destination="@id/gamesFragment"/><action android:id="@+id/action_global_settingsFragment" app:destination="@id/settingsFragment"/>
+        tools:layout="@layout/fragment_stats" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.amnpa.sbb.viewmodel.SettingsFragment"
+        android:label="SettingsFragment" />
+    <action android:id="@+id/action_global_gamesFragment" app:destination="@id/gamesFragment" />
+    <action android:id="@+id/action_global_leagueFragment" app:destination="@id/leagueFragment" />
+    <action android:id="@+id/action_global_settingsFragment" app:destination="@id/settingsFragment" />
+    <action android:id="@+id/action_global_statsFragment" app:destination="@id/statsFragment" />
 </navigation>

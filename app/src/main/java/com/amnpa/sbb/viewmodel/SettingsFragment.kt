@@ -1,7 +1,8 @@
-package com.amnpa.tbd
+package com.amnpa.sbb.viewmodel
 
 import android.os.Bundle
 import androidx.preference.PreferenceFragmentCompat
+import com.amnpa.sbb.R
 
 class SettingsFragment : PreferenceFragmentCompat() {
 

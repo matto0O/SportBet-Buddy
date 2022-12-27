@@ -1,4 +1,4 @@
-package com.amnpa.tbd
+package com.amnpa.sbb.model
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.TextView
+import com.amnpa.sbb.R
 
 class CheckRowAdapter(mContext: Context, private val dataSet: List<Competition>) :
     ArrayAdapter<Any?>(mContext, R.layout.row_checkbox, dataSet) {

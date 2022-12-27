@@ -1,4 +1,4 @@
-package com.amnpa.tbd
+package com.amnpa.sbb.viewmodel
 
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
@@ -8,6 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.FragmentContainerView
+import com.amnpa.sbb.R
+import com.amnpa.sbb.model.CheckRow
+import com.amnpa.sbb.model.CheckRowAdapter
+import com.amnpa.sbb.model.Competition
+import com.amnpa.sbb.model.ParseJSON
 
 class LeagueCreateFragment : Fragment() {
     private lateinit var checkRowAdapter: CheckRowAdapter

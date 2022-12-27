@@ -1,4 +1,4 @@
-package com.amnpa.tbd
+package com.amnpa.sbb.model
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName

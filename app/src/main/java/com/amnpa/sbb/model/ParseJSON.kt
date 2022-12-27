@@ -1,6 +1,5 @@
-package com.amnpa.tbd
+package com.amnpa.sbb.model
 
-import android.util.Log
 import android.widget.*
 import com.google.gson.Gson
 import kotlinx.coroutines.*

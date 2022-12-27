@@ -1,8 +1,7 @@
-package com.amnpa.tbd
+package com.amnpa.sbb.viewmodel
 
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
-import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +9,9 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.FragmentContainerView
 import androidx.navigation.fragment.findNavController
+import com.amnpa.sbb.R
+import com.amnpa.sbb.model.League
+import com.amnpa.sbb.model.ParseJSON
 
 class LeagueOverviewFragment : Fragment() {
 
@@ -35,7 +37,8 @@ class LeagueOverviewFragment : Fragment() {
         listLeagues.setOnItemClickListener { _, _, position, _ ->
             val action = LeagueOverviewFragmentDirections
                 .actionLeagueOverviewFragmentToLeagueStatusFragment(
-                listLeagues.adapter.getItem(position) as League)
+                listLeagues.adapter.getItem(position) as League
+                )
             findNavController().navigate(action)
         }
 
