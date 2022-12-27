@@ -16,9 +16,9 @@
         tools:layout="@layout/fragment_league" />
     <fragment
         android:id="@+id/statsFragment"
-        android:name="com.amnpa.sbb.viewmodel.StatsFragment"
+        android:name="com.amnpa.sbb.viewmodel.PlayerFragment"
         android:label="fragment_stats"
-        tools:layout="@layout/fragment_stats" />
+        tools:layout="@layout/fragment_player" />
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.amnpa.sbb.viewmodel.SettingsFragment"

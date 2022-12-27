@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.amnpa.sbb.viewmodel.GamesFragment
 import com.amnpa.sbb.viewmodel.LeagueFragment
-import com.amnpa.sbb.viewmodel.StatsFragment
+import com.amnpa.sbb.viewmodel.PlayerFragment
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation
 
 class MainActivity : AppCompatActivity() {
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
             fun onShowItem() {
                 goToFragment(
                     when(it.id){
-                        1 -> StatsFragment()
+                        1 -> PlayerFragment()
                         2 -> GamesFragment()
                         else -> LeagueFragment()
                     }
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.setOnClickMenuListener{
             goToFragment(
                 when(it.id){
-                    1 -> StatsFragment()
+                    1 -> PlayerFragment()
                     2 -> GamesFragment()
                     else -> LeagueFragment()
                 }
