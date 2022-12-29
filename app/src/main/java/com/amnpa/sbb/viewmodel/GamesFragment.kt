@@ -34,7 +34,7 @@ class GamesFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_games, container, false)
 
         recyclerView = view.findViewById(R.id.gamesRecyclerView)
-        title = view.findViewById(R.id.gamesText)
+        title = view.findViewById(R.id.textStatDescription)
         buttonGames = view.findViewById(R.id.gamesButton)
 
         val showPopup: (String, String) -> Unit = { t1: String, t2: String ->
@@ -57,8 +57,8 @@ class GamesFragment : Fragment() {
 
         }
 
-        betAdapter = BetAdapter(mutableListOf(), showPopup)
-        gameAdapter = GameAdapter(mutableListOf(), showPopup)
+        betAdapter = BetAdapter(mutableListOf())
+        gameAdapter = GameAdapter(mutableListOf())
 
         recyclerView.adapter = betAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
