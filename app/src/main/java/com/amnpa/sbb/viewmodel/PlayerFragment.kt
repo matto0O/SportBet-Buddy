@@ -18,6 +18,7 @@ class PlayerFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        Stats.fetchStats()
         val view = inflater.inflate(R.layout.fragment_player, container, false)
         val statAdapter = StatAdapter(Stats.randomStats())
         val recyclerView = view.findViewById<RecyclerView>(R.id.statRecView)
