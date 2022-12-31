@@ -6,18 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.amnpa.sbb.R
-import kotlinx.android.synthetic.main.game_card.view.*
+import kotlinx.android.synthetic.main.bet_card.view.*
+import kotlinx.android.synthetic.main.bet_card.view.textStatDescription
+import kotlinx.android.synthetic.main.stat_card.view.*
 
-class GameAdapter(
-    private val games: MutableList<Game>
-) : RecyclerView.Adapter<GameAdapter.ResultViewHolder>() {
+class StatAdapter(private val stats: List<Pair<String,Any>>)
+    : RecyclerView.Adapter<StatAdapter.ResultViewHolder>() {
 
     class ResultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResultViewHolder {
         return ResultViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.game_card,
+                R.layout.stat_card,
                 parent,
                 false
             )
@@ -26,24 +27,16 @@ class GameAdapter(
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ResultViewHolder, position: Int) {
-        val curResult = games[position]
+        val stat = stats[position]
 
         holder.itemView.apply {
-            textViewGame.text = curResult.team1 + " vs " + curResult.team2
-//            setOnClickListener {
-//                show(curResult.team1, curResult.team2)
-//            }
+            textStatDescription.text = stat.first
+            textStatValue.text = stat.second.toString()
         }
     }
 
     override fun getItemCount(): Int {
-        return games.size
+        return stats.size
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun reloadData(newData: List<Game>){
-        games.clear()
-        games.addAll(newData)
-        notifyDataSetChanged()
-    }
 }

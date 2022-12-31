@@ -32,17 +32,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:navGraph="@navigation/nav_graph" />
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
+    <com.etebarian.meowbottomnavigation.MeowBottomNavigation
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav">
+        app:mbn_circleColor="@color/app_main2"
+        app:mbn_selectedIconColor="@color/white"
+        app:mbn_defaultIconColor="@color/white"
+        app:mbn_backgroundBottomColor="@color/app_main2"
+        app:menu="@menu/bottom_nav"/>
 
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
 </androidx.constraintlayout.widget.ConstraintLayout>
