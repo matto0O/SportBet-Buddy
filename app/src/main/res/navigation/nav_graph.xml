@@ -20,11 +20,12 @@
         android:label="fragment_stats"
         tools:layout="@layout/fragment_stats" />
     <fragment
-        android:id="@+id/settingsFragment"
-        android:name="com.amnpa.sbb.viewmodel.SettingsFragment"
-        android:label="SettingsFragment" />
+        android:id="@+id/authFragment"
+        android:name="com.amnpa.sbb.viewmodel.AuthFragment"
+        android:label="AuthFragment"
+        tools:layout="@layout/fragment_auth"/>
     <action android:id="@+id/action_global_gamesFragment" app:destination="@id/gamesFragment" />
     <action android:id="@+id/action_global_leagueFragment" app:destination="@id/leagueFragment" />
-    <action android:id="@+id/action_global_settingsFragment" app:destination="@id/settingsFragment" />
+    <action android:id="@+id/action_global_settingsFragment" app:destination="@id/authFragment" />
     <action android:id="@+id/action_global_statsFragment" app:destination="@id/statsFragment" />
 </navigation>

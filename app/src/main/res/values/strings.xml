@@ -21,6 +21,7 @@
     <string name="results">Results</string>
     <string name="upcoming">Upcoming</string>
     <string name="join">Join</string>
+    <string name="login">Login</string>
     <string name="create_league">Create a new league</string>
     <string name="enter_code">Enter league code here</string>
     <string name="code_placeholder">Code placeholder</string>
@@ -35,4 +36,8 @@
     <string name="upcoming_games">Upcoming</string>
     <string name="results_games">Results</string>
     <string name="draw">Draw</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="create_account">Create account</string>
+    <string name="register">Register</string>
 </resources>

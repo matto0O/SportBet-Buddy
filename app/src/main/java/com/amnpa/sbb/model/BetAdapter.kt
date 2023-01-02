@@ -30,7 +30,7 @@ class BetAdapter(
         val curResult = games[position]
 
         holder.itemView.apply {
-            gamesText.text = curResult.game.team1 + " vs " + curResult.game.team2
+            usernameText.text = curResult.game.team1 + " vs " + curResult.game.team2
 //            setOnClickListener {
 //                show(curResult.gameId.toString(), curResult.gameId.toString())
 //            }

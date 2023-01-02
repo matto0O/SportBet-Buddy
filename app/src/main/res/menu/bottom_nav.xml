@@ -4,7 +4,7 @@
     <item
         android:title="@string/settings"
         android:icon="@drawable/ic_settings"
-        android:id="@+id/settingsFragment"
+        android:id="@+id/authFragment"
         />
     <item
         android:title="@string/games"
