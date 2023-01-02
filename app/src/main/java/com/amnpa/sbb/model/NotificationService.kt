@@ -2,6 +2,7 @@ package com.amnpa.sbb.model
 
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -10,17 +11,18 @@ import androidx.core.app.NotificationCompat
 import com.amnpa.sbb.MainActivity
 import com.amnpa.sbb.R
 
-class NotificationService(private val context: Context) {
+object NotificationService: BroadcastReceiver(){
+    const val CHANNEL_ID = "channel1"
 
-    private val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE)
-            as NotificationManager
+    override fun onReceive(context: Context?, intent: Intent){
+        val notificationManager = context!!.getSystemService(Context.NOTIFICATION_SERVICE)
+                as NotificationManager
 
-    fun showNotification(){
         val pendingIntent = PendingIntent.getActivity(
             context,
             1,
             Intent(context, MainActivity::class.java),
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
+            PendingIntent.FLAG_IMMUTABLE
         )
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notifications)
@@ -34,7 +36,4 @@ class NotificationService(private val context: Context) {
         notificationManager.notify(1, notification)
     }
 
-    companion object{
-        const val CHANNEL_ID = "channel1"
-    }
 }

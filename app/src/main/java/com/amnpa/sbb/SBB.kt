@@ -19,7 +19,7 @@ class SBB: Application() {
             val channel =
                 NotificationChannel(
                     NotificationService.CHANNEL_ID,
-                    "Push notifications",
+                    "Notifications",
                     NotificationManager.IMPORTANCE_DEFAULT
                 )
             val notificationsManager =

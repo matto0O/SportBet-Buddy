@@ -2,7 +2,8 @@
     <string-array name="notifications_values">
         <item>Every week</item>
         <item>Everyday</item>
-        <item>After ten new results</item>
         <item>After a new result</item>
+        <item>After five new results</item>
+        <item>After ten new results</item>
     </string-array>
 </resources>
