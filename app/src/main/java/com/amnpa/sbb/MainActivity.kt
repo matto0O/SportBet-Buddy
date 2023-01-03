@@ -9,6 +9,11 @@ import com.amnpa.sbb.viewmodel.PlayerFragment
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation
 
 class MainActivity : AppCompatActivity() {
+    val INTERNET_P = 101
+    val ANS_P = 102
+    val NOTIFICATIONS_P = 103
+    val SCHEDULE_ALARM_P = 104
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

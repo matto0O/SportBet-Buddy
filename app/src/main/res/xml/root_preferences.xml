@@ -13,13 +13,17 @@
             />
 
         <ListPreference
-            app:dependency="noti_res"
             app:defaultValue="Everyday"
             app:entries="@array/notifications_values"
             app:entryValues="@array/notifications_values"
             app:key="noti_occur"
             app:title="@string/notifications_title"
             app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            app:key="noti_time"
+            app:title="@string/notif_schedule_time"
+            />
 
     </PreferenceCategory>
 </PreferenceScreen>
