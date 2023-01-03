@@ -1,9 +1,12 @@
 package com.amnpa.sbb.model
 
+import android.content.Context
 import android.widget.*
 import com.google.gson.Gson
 import kotlinx.coroutines.*
 import okhttp3.*
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.MediaType.Companion.toMediaType
 import java.io.IOException
 
 object ParseJSON {
@@ -147,6 +150,52 @@ object ParseJSON {
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw IOException("Unexpected code $response")
             result = gson.fromJson(response.body!!.string(), Array<Bet>::class.java)
+        }
+        return result
+    }
+
+    private fun postLogin(username: String, password: String): Login? {
+        val json = """{
+            "username":"${username}",
+            "password":"${password}"}
+        """.trimIndent()
+
+        val mediaType = "application/json; charset=utf-8".toMediaType()
+        val requestBody = json.toRequestBody(mediaType)
+
+        val request = Request.Builder()
+            .method("POST", requestBody)
+            .url("http://10.0.2.2:5000/login")
+            .build()
+
+        var result: Login? = null
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) println("lol")
+            result = gson.fromJson(response.body!!.string(), Login::class.java)
+        }
+        return result
+    }
+
+    private fun postRegister(username: String, password: String, context: Context?): Register? {
+        val json = """{
+            "username":"${username}",
+            "password":"${password}"}
+        """.trimIndent()
+
+        val mediaType = "application/json; charset=utf-8".toMediaType()
+        val requestBody = json.toRequestBody(mediaType)
+
+        val request = Request.Builder()
+            .method("POST", requestBody)
+            .url("http://10.0.2.2:5000/register")
+            .build()
+
+        var result: Register? = null
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) println()
+            result = gson.fromJson(response.body!!.string(), Register::class.java)
         }
         return result
     }
@@ -405,4 +454,57 @@ object ParseJSON {
             transferData(data)
         }
     }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun fetchAuthData(login: String, password: String, startupFun: () -> Unit, cleanupFun: () -> Unit,
+                      transferData: (Login?) -> Unit){
+        GlobalScope.launch(Dispatchers.IO){
+            startupFun()
+            val data = async {
+                while (true){
+                    try {
+                        return@async postLogin(login, password)
+                    } catch (e:Exception) {
+                        when(e){
+                            is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
+                            is java.net.ConnectException,
+                            is java.net.SocketTimeoutException ->
+                                continue
+                            else -> throw e
+                        }
+                    }
+                }
+            }.await() as Login?
+            cleanupFun()
+            transferData(data)
+        }
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun fetchRegistration(login: String, password: String, startupFun: () -> Unit, cleanupFun: () -> Unit,
+                          transferData: (Register?) -> Unit, context: Context?
+    ){
+        GlobalScope.launch(Dispatchers.IO){
+            startupFun()
+            val data = async {
+                try {
+                    return@async postRegister(login, password, context)
+                } catch (e:Exception) {
+                    when(e){
+                        is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
+                        is java.net.ConnectException,
+                        is java.net.SocketTimeoutException ->
+                            println()
+                        else -> throw e
+                    }
+                }
+            }.await() as Register?
+            cleanupFun()
+            transferData(data)
+        }
+    }
+
 }
+
+
+

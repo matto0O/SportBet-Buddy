@@ -3,6 +3,7 @@ package com.amnpa.sbb
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import com.amnpa.sbb.viewmodel.AuthFragment
 import com.amnpa.sbb.viewmodel.GamesFragment
 import com.amnpa.sbb.viewmodel.LeagueFragment
 import com.amnpa.sbb.viewmodel.PlayerFragment
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.add(MeowBottomNavigation.Model(1, R.drawable.ic_user))
         bottomNavigationView.add(MeowBottomNavigation.Model(2, R.drawable.ic_games))
         bottomNavigationView.add(MeowBottomNavigation.Model(3, R.drawable.ic_league))
+        bottomNavigationView.add(MeowBottomNavigation.Model(4, R.drawable.ic_league))
 
         goToFragment(GamesFragment())
 
@@ -47,7 +49,8 @@ class MainActivity : AppCompatActivity() {
         val fragment = when(it.id){
             1 -> PlayerFragment()
             2 -> GamesFragment()
-            else -> LeagueFragment()
+            3 -> LeagueFragment()
+            else -> AuthFragment()
         }
 
         supportFragmentManager

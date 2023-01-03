@@ -21,8 +21,8 @@
         tools:layout="@layout/fragment_player" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.amnpa.sbb.viewmodel.SettingsFragment"
-        android:label="SettingsFragment" />
+        android:name="com.amnpa.sbb.viewmodel.AuthFragment"
+        android:label="AuthFragment" />
     <action android:id="@+id/action_global_gamesFragment" app:destination="@id/gamesFragment" />
     <action android:id="@+id/action_global_leagueFragment" app:destination="@id/leagueFragment" />
     <action android:id="@+id/action_global_settingsFragment" app:destination="@id/settingsFragment" />
