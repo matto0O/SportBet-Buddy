@@ -28,31 +28,35 @@ class MainActivity : AppCompatActivity() {
 
         bottomNavigationView.setOnShowListener {
             fun onShowItem() {
-                goToFragment(
-                    when(it.id){
-                        1 -> PlayerFragment()
-                        2 -> GamesFragment()
-                        else -> LeagueFragment()
-                    }
-                )
+                goToFragment(it)
             }
         }
 
         bottomNavigationView.setOnClickMenuListener{
-            goToFragment(
-                when(it.id){
-                    1 -> PlayerFragment()
-                    2 -> GamesFragment()
-                    else -> LeagueFragment()
-                }
-            )
+            goToFragment(it)
+        }
+
+        bottomNavigationView.setOnReselectListener {
+            goToFragment(it)
         }
 
         bottomNavigationView.show(2, true)
     }
 
-    private fun goToFragment(fragment: Fragment){
+    private fun goToFragment(it: MeowBottomNavigation.Model){
+        val fragment = when(it.id){
+            1 -> PlayerFragment()
+            2 -> GamesFragment()
+            else -> LeagueFragment()
+        }
 
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragmentContainerView, fragment)
+            .commit()
+    }
+
+    private fun goToFragment(fragment: Fragment){
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.fragmentContainerView, fragment)
