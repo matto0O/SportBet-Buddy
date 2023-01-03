@@ -8,6 +8,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.amnpa.sbb.R
+import com.amnpa.sbb.model.NotificationScheduler
 import java.sql.Time
 
 const val TIME_TAG = "time"
@@ -40,8 +41,21 @@ class SettingsFragment : PreferenceFragmentCompat() {
                         apply()
                     }
                     button.summary = time
+                    NotificationScheduler.cancelNotification(requireActivity().applicationContext)
+                    when(occurring.value){
+                        "Everyday" -> NotificationScheduler.
+                        scheduleNotification(requireActivity().applicationContext,true)
+
+                        "Every week" -> NotificationScheduler.
+                        scheduleNotification(requireActivity().applicationContext,false)
+
+                        else -> {}
+                    }
+
                 },
-                18, 0, true
+                time.toString().slice(0 until 2).toInt(),
+                time.toString().slice(3 until 5).toInt(),
+                true
             )
             timePickerDialog.setTitle(R.string.notif_schedule_time)
             timePickerDialog.show()
@@ -50,13 +64,24 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
 
         occurring.setOnPreferenceChangeListener { _, newValue ->
-            button.isEnabled = newValue.toString() in listOf("Everyday", "Every week")
+            NotificationScheduler.cancelNotification(requireActivity().applicationContext)
+            when(newValue){
+                "Everyday" -> {
+                    NotificationScheduler.scheduleNotification(
+                        requireActivity().applicationContext, true
+                    )
+                    button.isEnabled = true
+                }
+                "Every week" -> {
+                    NotificationScheduler.scheduleNotification(
+                        requireActivity().applicationContext, false
+                    )
+                    button.isEnabled = true
+                }
+                else -> button.isEnabled = false
+            }
             return@setOnPreferenceChangeListener true
         }
 
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 }
