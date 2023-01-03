@@ -43,7 +43,7 @@ class NotificationService: BroadcastReceiver(){
 
     companion object
     {
-        private const val CHANNEL_ID = "channel1"
+        const val CHANNEL_ID = "channel1"
         private const val CHANNEL_NAME = "Notifications"
         private const val CODE = 1
     }
