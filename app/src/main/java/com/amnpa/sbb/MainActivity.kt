@@ -1,12 +1,10 @@
 package com.amnpa.sbb
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.amnpa.sbb.viewmodel.AuthFragment
-import com.amnpa.sbb.viewmodel.GamesFragment
-import com.amnpa.sbb.viewmodel.LeagueFragment
-import com.amnpa.sbb.viewmodel.PlayerFragment
+import com.amnpa.sbb.viewmodel.*
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation
 
 class MainActivity : AppCompatActivity() {
@@ -19,12 +17,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val prefs = getPreferences(MODE_PRIVATE)
+        val id = prefs.getInt("user_id", -1)
+        if (id == -1){
+            println(id)
+            val authActivity = Intent(this, AuthActivity::class.java)
+            startActivity(authActivity)
+        }
+
         val bottomNavigationView = findViewById<MeowBottomNavigation>(R.id.bottomNavigationView)
 
         bottomNavigationView.add(MeowBottomNavigation.Model(1, R.drawable.ic_user))
         bottomNavigationView.add(MeowBottomNavigation.Model(2, R.drawable.ic_games))
         bottomNavigationView.add(MeowBottomNavigation.Model(3, R.drawable.ic_league))
-        bottomNavigationView.add(MeowBottomNavigation.Model(4, R.drawable.ic_league))
 
         goToFragment(GamesFragment())
 
@@ -49,8 +54,7 @@ class MainActivity : AppCompatActivity() {
         val fragment = when(it.id){
             1 -> PlayerFragment()
             2 -> GamesFragment()
-            3 -> LeagueFragment()
-            else -> AuthFragment()
+            else -> LeagueFragment()
         }
 
         supportFragmentManager

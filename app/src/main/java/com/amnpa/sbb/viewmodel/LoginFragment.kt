@@ -1,6 +1,7 @@
 package com.amnpa.sbb.viewmodel
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.FragmentContainerView
 import androidx.navigation.fragment.findNavController
+import com.amnpa.sbb.MainActivity
 import com.amnpa.sbb.R
 import com.amnpa.sbb.model.League
 import com.amnpa.sbb.model.Login
@@ -59,53 +61,49 @@ class LoginFragment : Fragment() {
         return view
     }
 
-    override fun onStart() {
-        fragmentContainerView = requireActivity().findViewById(R.id.fragmentContainerView)
-        loading = requireActivity().findViewById(R.id.loadingScreen)
-        super.onStart()
-    }
-
-
-    override fun onStop() {
-        (loading.drawable as AnimationDrawable).stop()
-        fragmentContainerView.alpha = 1F
-        loading.alpha=0F
-        super.onStop()
-    }
+//    override fun onStart() {
+//        fragmentContainerView = requireActivity().findViewById(R.id.fragmentContainerView)
+//        loading = requireActivity().findViewById(R.id.loadingScreen)
+//        super.onStart()
+//    }
+//
+//
+//    override fun onStop() {
+//        (loading.drawable as AnimationDrawable).stop()
+//        fragmentContainerView.alpha = 1F
+//        loading.alpha=0F
+//        super.onStop()
+//    }
 
     private fun triggerLoadingScreen(){
-        fragmentContainerView.alpha = 0.2F
-        loading.alpha=1F
-        (loading.drawable as AnimationDrawable).start()
+//        fragmentContainerView.alpha = 0.2F
+//        loading.alpha=1F
+//        (loading.drawable as AnimationDrawable).start()
     }
 
     private fun dissolveLoadingScreen(){
-        (loading.drawable as AnimationDrawable).stop()
-        fragmentContainerView.alpha = 1F
-        loading.alpha=0F
+//        (loading.drawable as AnimationDrawable).stop()
+//        fragmentContainerView.alpha = 1F
+//        loading.alpha=0F
     }
 
     private fun testAuthData(data: Login?){
         requireActivity().runOnUiThread {
             println(data)
             val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
-            if (sharedPref != null) {
-                with (sharedPref.edit()) {
-                    if (data != null && data.userId != 0) {
-                        putInt("user_id", data.userId)
-                        putString("token", data.token)
-                        putString("username", data.username)
-                        Toast.makeText(context, "Logged in!", Toast.LENGTH_SHORT).show()
-
-                    }
-                    else {
-                        Toast.makeText(context, "Invalid credentials", Toast.LENGTH_SHORT).show()
-                    }
-                    apply()
+            sharedPref?.edit()?.apply {
+                if (data != null && data.userId != 0) {
+                    putInt("user_id", data.userId)
+                    putString("token", data.token)
+                    putString("username", data.username)
+                } else {
+                    Toast.makeText(context, "Invalid credentials", Toast.LENGTH_SHORT).show()
                 }
+                apply()
             }
             if (sharedPref != null) {
-                println(sharedPref.getInt("user_id", 100)) // EXAMPLE HOW TO OBTAIN ID
+                if(sharedPref.getInt("user_id", -1) != -1)
+                    requireActivity().onBackPressed()
             }
         }
     }
