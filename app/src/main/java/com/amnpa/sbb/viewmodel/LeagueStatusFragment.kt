@@ -43,7 +43,6 @@ class LeagueStatusFragment : Fragment() {
         buttonQuit.setOnClickListener {
             Toast.makeText(context, "Left ${textLeagueName.text}", Toast.LENGTH_SHORT)
                 .show()
-            println(activity?.getPreferences(Context.MODE_PRIVATE)!!.getInt("user_id", -1))
             // TODO real implementation of leaving the league
         }
 
@@ -59,29 +58,29 @@ class LeagueStatusFragment : Fragment() {
         return view
     }
 
-//    override fun onStart() {
-//        super.onStart()
-//        fragmentContainerView = requireActivity().findViewById(R.id.fragmentContainerView)
-//        loading = requireActivity().findViewById(R.id.loadingScreen)
-//    }
-//
-//    override fun onStop() {
-//        (loading.drawable as AnimationDrawable).stop()
-//        fragmentContainerView.alpha = 1F
-//        loading.alpha=0F
-//        super.onStop()
-//    }
+    override fun onStart() {
+        super.onStart()
+        fragmentContainerView = requireActivity().findViewById(R.id.fragmentContainerView)
+        loading = requireActivity().findViewById(R.id.loadingScreen)
+    }
+
+    override fun onStop() {
+        (loading.drawable as AnimationDrawable).stop()
+        fragmentContainerView.alpha = 1F
+        loading.alpha=0F
+        super.onStop()
+    }
 
     private fun triggerLoadingScreen(){
-//        fragmentContainerView.alpha = 0.2F
-//        loading.alpha=1F
-//        (loading.drawable as AnimationDrawable).start()
+        fragmentContainerView.alpha = 0.2F
+        loading.alpha=1F
+        (loading.drawable as AnimationDrawable).start()
     }
 
     private fun dissolveLoadingScreen(){
-//        (loading.drawable as AnimationDrawable).stop()
-//        fragmentContainerView.alpha = 1F
-//        loading.alpha=0F
+        (loading.drawable as AnimationDrawable).stop()
+        fragmentContainerView.alpha = 1F
+        loading.alpha=0F
     }
 
     private fun importStandings(data: Array<Player>?){

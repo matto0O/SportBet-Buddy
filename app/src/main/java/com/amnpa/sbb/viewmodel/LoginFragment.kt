@@ -103,7 +103,7 @@ class LoginFragment : Fragment() {
             }
             if (sharedPref != null) {
                 if(sharedPref.getInt("user_id", -1) != -1)
-                    requireActivity().onBackPressed()
+                    requireActivity().finish()
             }
         }
     }

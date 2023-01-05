@@ -1,7 +1,5 @@
 package com.amnpa.sbb.viewmodel
 
-import android.content.Context
-import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -45,7 +43,7 @@ class RegisterFragment : Fragment() {
                     textPassword.text.toString(),
                     ::triggerLoadingScreen,
                     ::dissolveLoadingScreen,
-                    ::handleRegsistration,
+                    ::handleRegistration,
                     context
                 )
         }
@@ -60,39 +58,43 @@ class RegisterFragment : Fragment() {
         return view
     }
 
-    override fun onStart() {
-        fragmentContainerView = requireActivity().findViewById(R.id.fragmentContainerView)
-        loading = requireActivity().findViewById(R.id.loadingScreen)
-        super.onStart()
-    }
+//    override fun onStart() {
+//        fragmentContainerView = requireActivity().findViewById(R.id.fragmentContainerView)
+//        loading = requireActivity().findViewById(R.id.loadingScreen)
+//        super.onStart()
+//    }
 
 
-    override fun onStop() {
-        (loading.drawable as AnimationDrawable).stop()
-        fragmentContainerView.alpha = 1F
-        loading.alpha=0F
-        super.onStop()
-    }
+//    override fun onStop() {
+//        (loading.drawable as AnimationDrawable).stop()
+//        fragmentContainerView.alpha = 1F
+//        loading.alpha=0F
+//        super.onStop()
+//    }
 
     private fun triggerLoadingScreen(){
-        fragmentContainerView.alpha = 0.2F
-        loading.alpha=1F
-        (loading.drawable as AnimationDrawable).start()
+//        fragmentContainerView.alpha = 0.2F
+//        loading.alpha=1F
+//        (loading.drawable as AnimationDrawable).start()
     }
 
     private fun dissolveLoadingScreen(){
-        (loading.drawable as AnimationDrawable).stop()
-        fragmentContainerView.alpha = 1F
-        loading.alpha=0F
+//        (loading.drawable as AnimationDrawable).stop()
+//        fragmentContainerView.alpha = 1F
+//        loading.alpha=0F
     }
 
-    private fun handleRegsistration(data: Register?){
+    private fun handleRegistration(data: Register?){
         requireActivity().runOnUiThread {
             if(data != null && data.created){
                 Toast.makeText(context, "Account was created", Toast.LENGTH_SHORT).show()
+                findNavController().navigate(
+                    RegisterFragmentDirections
+                        .actionRegisterFragmentToLoginFragment()
+                )
             }
             else {
-                Toast.makeText(context, "Account wasnt created", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Account wasn't created", Toast.LENGTH_SHORT).show()
             }
         }
     }
