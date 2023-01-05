@@ -25,7 +25,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             (occurring!!.value.toString() in listOf("Everyday", "Every week")) and switch!!.isChecked
 
         val sharedPreferences =
-            requireActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE)
+            requireActivity().getPreferences(Context.MODE_PRIVATE)
         val spEditor = sharedPreferences.edit()
 
         var time = sharedPreferences.getString(TIME_TAG, "18:00")

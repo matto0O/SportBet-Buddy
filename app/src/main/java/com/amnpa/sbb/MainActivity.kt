@@ -1,11 +1,10 @@
 package com.amnpa.sbb
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.amnpa.sbb.viewmodel.GamesFragment
-import com.amnpa.sbb.viewmodel.LeagueFragment
-import com.amnpa.sbb.viewmodel.PlayerFragment
+import com.amnpa.sbb.viewmodel.*
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation
 
 class MainActivity : AppCompatActivity() {
@@ -17,6 +16,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val prefs = getPreferences(MODE_PRIVATE)
+        val id = prefs.getInt("user_id", -1)
+        if (id == -1){
+            println(id)
+            val authActivity = Intent(this, AuthActivity::class.java)
+            startActivity(authActivity)
+        }
 
         val bottomNavigationView = findViewById<MeowBottomNavigation>(R.id.bottomNavigationView)
 
