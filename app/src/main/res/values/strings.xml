@@ -36,4 +36,10 @@
     <string name="results_games">Results</string>
     <string name="draw">Draw</string>
     <string name="account">Account</string>
+    <string name="notif_schedule_time">Notifications\' planned occurrence time</string>
+    <string name="login">Login</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="create_account">Create account</string>
+    <string name="register">Register</string>
 </resources>
