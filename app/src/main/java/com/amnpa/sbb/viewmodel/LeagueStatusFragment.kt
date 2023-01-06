@@ -1,6 +1,5 @@
 package com.amnpa.sbb.viewmodel
 
-import android.content.Context
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,15 +10,18 @@ import android.widget.*
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.amnpa.sbb.R
 import com.amnpa.sbb.model.ParseJSON
 import com.amnpa.sbb.model.Player
+import com.amnpa.sbb.model.PlayerAdapter
 
 class LeagueStatusFragment : Fragment() {
-
+    private lateinit var playerAdapter: PlayerAdapter
     private lateinit var fragmentContainerView: FragmentContainerView
     private lateinit var loading: ImageView
-    private lateinit var listPlayers: ListView
+    private lateinit var listPlayers: RecyclerView
     private val args by navArgs<LeagueStatusFragmentArgs>()
     private lateinit var _fragmentManager: FragmentManager
 
@@ -38,7 +40,11 @@ class LeagueStatusFragment : Fragment() {
         val textLeagueCode = view.findViewById<TextView>(R.id.textViewLeagueCode)
         val textLeagueName = view.findViewById<TextView>(R.id.textViewLeagueName)
         val buttonQuit = view.findViewById<Button>(R.id.buttonQuitLeague)
-        listPlayers = view.findViewById(R.id.listViewPlayers)
+        listPlayers = view.findViewById(R.id.recyclerPlayers)
+        playerAdapter = PlayerAdapter(mutableListOf())
+
+        listPlayers.adapter = playerAdapter
+        listPlayers.layoutManager = LinearLayoutManager(context)
 
         buttonQuit.setOnClickListener {
             Toast.makeText(context, "Left ${textLeagueName.text}", Toast.LENGTH_SHORT)
@@ -85,12 +91,10 @@ class LeagueStatusFragment : Fragment() {
 
     private fun importStandings(data: Array<Player>?){
         requireActivity().runOnUiThread {
-            listPlayers.adapter = try {
-                ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,
-                    data!!.asList())
+            try {
+                playerAdapter.reloadData(data!!.asList())
             } catch (e: java.lang.NullPointerException) {
-                ArrayAdapter(requireContext(),
-                    android.R.layout.simple_list_item_1, emptyList<Player>())
+                playerAdapter.reloadData(emptyList())
             }
         }
     }
