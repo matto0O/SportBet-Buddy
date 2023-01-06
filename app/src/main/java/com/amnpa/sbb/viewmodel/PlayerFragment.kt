@@ -40,7 +40,7 @@ class PlayerFragment : Fragment() {
 
         val logout = view.findViewById<Button>(R.id.buttonLogout)
 
-        val prefs = requireActivity().getPreferences(Context.MODE_PRIVATE)!!
+        val prefs = requireActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE)!!
 
         userLogin.text = prefs.getInt("user_id", -1).toString()
 

@@ -20,7 +20,6 @@ class MainActivity : AppCompatActivity() {
         val prefs = getSharedPreferences("prefs", MODE_PRIVATE)
         val id = prefs.getInt("user_id", -1)
         if (id == -1){
-            println(id)
             val authActivity = Intent(this, AuthActivity::class.java)
             startActivity(authActivity)
         }
