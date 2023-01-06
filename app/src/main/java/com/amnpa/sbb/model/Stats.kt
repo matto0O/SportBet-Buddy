@@ -11,12 +11,12 @@ object Stats {
         map["Success rate"] = 0.0
         map["Biggest win"] = 0.0
         map["Best streak"] = 0
-        map["Most frequently bet on"] = ""
+        map["Most frequently bet on"] = "-"
         map["Favourite sport"] = "Football"
         map["Bet on different disciplines"] = 0
     }
 
-    fun fetchStats(){
+    fun fetchStats(userId: Int){
         // TODO fetch stats
     }
 

@@ -25,7 +25,6 @@ class PlayerFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        Stats.fetchStats()
         val view = inflater.inflate(R.layout.fragment_player, container, false)
         val statAdapter = StatAdapter(Stats.randomStats())
         val recyclerView = view.findViewById<RecyclerView>(R.id.statRecView)
@@ -40,9 +39,12 @@ class PlayerFragment : Fragment() {
 
         val logout = view.findViewById<Button>(R.id.buttonLogout)
 
-        val prefs = requireActivity().getPreferences(Context.MODE_PRIVATE)!!
+        val prefs = requireActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE)!!
+        val userId = prefs.getInt("user_id", -1)
 
-        userLogin.text = prefs.getInt("user_id", -1).toString()
+        Stats.fetchStats(userId)
+
+        userLogin.text = userId.toString()
 
         textNickname.text = prefs
                             .getString("username", "name")

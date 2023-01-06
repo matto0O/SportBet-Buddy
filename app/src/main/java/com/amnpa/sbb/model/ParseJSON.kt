@@ -14,9 +14,9 @@ object ParseJSON {
     private val client = OkHttpClient()
     private val gson = Gson()
 
-    private fun getGroups(): Array<League>? {
+    private fun getGroups(userId: Int): Array<League>? {
         val request = Request.Builder()
-            .url("http://10.0.2.2:5000//groups-by-user/1")
+            .url("http://10.0.2.2:5000//groups-by-user/$userId")
             .build()
 
         var result: Array<League>? = null
@@ -156,8 +156,8 @@ object ParseJSON {
 
     private fun postLogin(username: String, password: String): Login? {
         val json = """{
-            "username":"${username}",
-            "password":"${password}"}
+            "username":"$username",
+            "password":"$password"}
         """.trimIndent()
 
         val mediaType = "application/json; charset=utf-8".toMediaType()
@@ -179,8 +179,8 @@ object ParseJSON {
 
     private fun postRegister(username: String, password: String, context: Context?): Register? {
         val json = """{
-            "username":"${username}",
-            "password":"${password}"}
+            "username":"$username",
+            "password":"$password"}
         """.trimIndent()
 
         val mediaType = "application/json; charset=utf-8".toMediaType()
@@ -406,14 +406,14 @@ object ParseJSON {
     }
 
     @OptIn(DelicateCoroutinesApi::class)
-    fun fetchLeagues(startupFun: () -> Unit, cleanupFun: () -> Unit,
+    fun fetchLeagues(userId: Int, startupFun: () -> Unit, cleanupFun: () -> Unit,
                      transferData: (Array<League>?) -> Unit){
         GlobalScope.launch(Dispatchers.IO){
             startupFun()
             val data = async {
                 while (true){
                     try {
-                        return@async getGroups()
+                        return@async getGroups(userId)
                     } catch (e:Exception) {
                         when(e){
                             is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
