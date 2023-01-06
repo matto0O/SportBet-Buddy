@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val prefs = getPreferences(MODE_PRIVATE)
+        val prefs = getSharedPreferences("prefs", MODE_PRIVATE)
         val id = prefs.getInt("user_id", -1)
         if (id == -1){
             println(id)

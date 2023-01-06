@@ -1,8 +1,6 @@
 package com.amnpa.sbb.viewmodel
 
 import android.content.Context
-import android.content.Intent
-import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,9 +9,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.FragmentContainerView
 import androidx.navigation.fragment.findNavController
-import com.amnpa.sbb.MainActivity
 import com.amnpa.sbb.R
-import com.amnpa.sbb.model.League
 import com.amnpa.sbb.model.Login
 import com.amnpa.sbb.model.ParseJSON
 
@@ -90,7 +86,7 @@ class LoginFragment : Fragment() {
     private fun testAuthData(data: Login?){
         requireActivity().runOnUiThread {
             println(data)
-            val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+            val sharedPref = activity?.getSharedPreferences("prefs",Context.MODE_PRIVATE)
             sharedPref?.edit()?.apply {
                 if (data != null && data.userId != 0) {
                     putInt("user_id", data.userId)

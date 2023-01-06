@@ -1,8 +1,8 @@
 package com.amnpa.sbb.viewmodel
 
 import android.app.TimePickerDialog
-import android.content.Context
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -25,7 +25,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             (occurring!!.value.toString() in listOf("Everyday", "Every week")) and switch!!.isChecked
 
         val sharedPreferences =
-            requireActivity().getPreferences(Context.MODE_PRIVATE)
+            requireActivity().getSharedPreferences("prefs", AppCompatActivity.MODE_PRIVATE)
         val spEditor = sharedPreferences.edit()
 
         var time = sharedPreferences.getString(TIME_TAG, "18:00")

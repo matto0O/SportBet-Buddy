@@ -42,4 +42,6 @@
     <string name="password">Password</string>
     <string name="create_account">Create account</string>
     <string name="register">Register</string>
+    <string name="not_created">Account wasn\'t created</string>
+    <string name="created">Account was created</string>
 </resources>
