@@ -44,4 +44,9 @@
     <string name="register">Register</string>
     <string name="not_created">Account wasn\'t created</string>
     <string name="created">Account was created</string>
+    <string name="user_login">User Login</string>
+    <string name="logout">Logout</string>
+    <string name="u_sure">Are you sure?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>
