@@ -92,6 +92,7 @@ class LoginFragment : Fragment() {
                     putInt("user_id", data.userId)
                     putString("token", data.token)
                     putString("username", data.username)
+                    println(data.username)
                 } else {
                     Toast.makeText(context, "Invalid credentials", Toast.LENGTH_SHORT).show()
                 }

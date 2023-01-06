@@ -1,14 +1,13 @@
 package com.amnpa.sbb.viewmodel
 
+import android.content.Context.MODE_PRIVATE
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
@@ -36,26 +35,6 @@ class GamesFragment : Fragment() {
         recyclerView = view.findViewById(R.id.gamesRecyclerView)
         title = view.findViewById(R.id.textStatDescription)
         buttonGames = view.findViewById(R.id.gamesButton)
-
-        val showPopup: (String, String) -> Unit = { t1: String, t2: String ->
-            val popup: View = layoutInflater.inflate(R.layout.game_popup, null)
-            val popupWindow = PopupWindow(popup, (view.width * 0.75).toInt(),
-                (view.height * 0.75).toInt(), true)
-
-            val team1 = popup.findViewById<TextView>(R.id.selectTeam1)
-            team1.text = t1
-            team1.setOnClickListener { popupWindow.dismiss() }
-            val team2 = popup.findViewById<TextView>(R.id.selectTeam2)
-            team2.text = t2
-            team2.setOnClickListener { popupWindow.dismiss() }
-            popup.findViewById<TextView>(R.id.selectDraw)
-                .setOnClickListener { popupWindow.dismiss() }
-
-            // TODO Make buttons post bets onto the database
-
-            popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
-
-        }
 
         betAdapter = BetAdapter(mutableListOf())
         gameAdapter = GameAdapter(mutableListOf())
@@ -88,9 +67,11 @@ class GamesFragment : Fragment() {
     override fun onStart() {
         fragmentContainerView = requireActivity().findViewById(R.id.fragmentContainerView)
         loading = requireActivity().findViewById(R.id.loadingScreen)
-        ParseJSON.fetchGames(
+        val id = requireActivity().getSharedPreferences("prefs", MODE_PRIVATE)
+            .getInt("user_id", -1)
+        ParseJSON.fetchGamesByUser(id,
             ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importGames)
-        ParseJSON.fetchBets(
+        ParseJSON.fetchBets(//id,
             ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importBets)
         super.onStart()
     }
