@@ -22,28 +22,28 @@
 
     <Button
         android:id="@+id/buttonJoinLeague"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/button_greenish"
-        app:backgroundTint="#FFFFFF"
-        app:backgroundTintMode="multiply"
         android:text="@string/join"
         android:textColor="@color/app_main2"
+        app:backgroundTint="#FFFFFF"
+        app:backgroundTintMode="multiply"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextEnterCode" />
 
     <Button
         android:id="@+id/buttonCreateLeague"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
         android:background="@drawable/button_blueish"
-        app:backgroundTint="#FFFFFF"
-        app:backgroundTintMode="multiply"
         android:text="@string/create_league"
         android:textColor="@color/app_main2"
+        app:backgroundTint="#FFFFFF"
+        app:backgroundTintMode="multiply"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonJoinLeague" />
