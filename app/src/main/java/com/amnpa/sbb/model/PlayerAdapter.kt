@@ -33,6 +33,32 @@ class PlayerAdapter(
             textPlayerPlace.text = "${position+1}."
             textNickname.text = curResult.name
             textPoints.text = position.toString()  //TODO points
+
+            when(position){
+                0 -> {
+                    cardViewPlayer.setCardBackgroundColor(resources.getColor(R.color.gold))
+                    textPlayerPlace.setTextColor(resources.getColor(R.color.black))
+                    textNickname.setTextColor(resources.getColor(R.color.black))
+                    textPoints.setTextColor(resources.getColor(R.color.black))
+                }
+                1 -> {
+                    cardViewPlayer.setCardBackgroundColor(resources.getColor(R.color.silver))
+                    textPlayerPlace.setTextColor(resources.getColor(R.color.black))
+                    textNickname.setTextColor(resources.getColor(R.color.black))
+                    textPoints.setTextColor(resources.getColor(R.color.black))
+                }
+                2 -> {
+                    cardViewPlayer.setCardBackgroundColor(resources.getColor(R.color.bronze))
+                    textPlayerPlace.setTextColor(resources.getColor(R.color.white))
+                    textNickname.setTextColor(resources.getColor(R.color.white))
+                    textPoints.setTextColor(resources.getColor(R.color.white))
+                }
+                else -> {
+                    textPlayerPlace.setTextColor(resources.getColor(R.color.black))
+                    textNickname.setTextColor(resources.getColor(R.color.black))
+                    textPoints.setTextColor(resources.getColor(R.color.black))
+                }
+            }
         }
     }
 

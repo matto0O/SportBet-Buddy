@@ -12,4 +12,7 @@
     <color name="app_green">#019503</color>
     <color name="app_main">#B3B3B3</color>
     <color name="app_main2">#2C2C2C</color>
+    <color name="gold">#FFFFC907</color>
+    <color name="silver">#B5B5B5</color>
+    <color name="bronze">#91582F</color>
 </resources>

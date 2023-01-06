@@ -33,8 +33,8 @@ class GameAdapter(
             textViewGameCompetition.text = curResult.competitionId.toString()
             textViewGameDatetime.text = curResult.date
             betDrawButton.text = "X\n${curResult.drawOdds}"
-            betHostButton.text = "X\n${curResult.team1Odds}"
-            betVisitorButton.text = "X\n${curResult.team2Odds}"
+            betHostButton.text = "1\n${curResult.team1Odds}"
+            betVisitorButton.text = "2\n${curResult.team2Odds}"
         }
     }
 
