@@ -36,7 +36,7 @@ class RegisterFragment : Fragment() {
 
         buttonSubmit.setOnClickListener{
             if (textUsername.text.toString() == "" || textPassword.text.toString() == "")
-                Toast.makeText(context, "Account wasnt created", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.not_created), Toast.LENGTH_SHORT).show()
             else
                 ParseJSON.fetchRegistration(
                     textUsername.text.toString(),
@@ -87,14 +87,14 @@ class RegisterFragment : Fragment() {
     private fun handleRegistration(data: Register?){
         requireActivity().runOnUiThread {
             if(data != null && data.created){
-                Toast.makeText(context, "Account was created", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.created), Toast.LENGTH_SHORT).show()
                 findNavController().navigate(
                     RegisterFragmentDirections
                         .actionRegisterFragmentToLoginFragment()
                 )
             }
             else {
-                Toast.makeText(context, "Account wasn't created", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, R.string.not_created, Toast.LENGTH_SHORT).show()
             }
         }
     }

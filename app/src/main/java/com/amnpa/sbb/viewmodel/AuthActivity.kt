@@ -10,4 +10,6 @@ class AuthActivity : AppCompatActivity() {
         super.onCreate(null)
         setContentView(R.layout.activity_auth)
     }
+
+    override fun onBackPressed() {}
 }
