@@ -48,7 +48,7 @@ class LeagueStatusFragment : Fragment() {
 
         val selected = args.league
         textLeagueCode.text = selected.leagueCode
-        textLeagueName.text = selected.leagueCode // TODO add name
+        textLeagueName.text = selected.leagueId.toString() // TODO add name
         ParseJSON.fetchUsersByLeague(
             selected.leagueId,
             ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importStandings)

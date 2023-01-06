@@ -67,18 +67,18 @@ class GamesFragment : Fragment() {
 
             when(title.text){
                 getString(R.string.results_games) -> {
+                    ParseJSON.fetchGames(
+                        ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importGames)
                     title.text = getString(R.string.upcoming_games)
                     buttonGames.text = getString(R.string.results_games)
                     recyclerView.adapter = gameAdapter
-                    ParseJSON.fetchGames(
-                        ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importGames)
                 }
                 getString(R.string.upcoming_games) -> {
+                    ParseJSON.fetchBets(
+                        ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importBets)
                     title.text = getString(R.string.results_games)
                     buttonGames.text = getString(R.string.upcoming_games)
                     recyclerView.adapter = betAdapter
-                    ParseJSON.fetchBets(
-                        ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importBets)
                 }
             }
         }

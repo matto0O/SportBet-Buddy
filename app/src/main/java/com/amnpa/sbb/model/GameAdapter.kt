@@ -29,10 +29,12 @@ class GameAdapter(
         val curResult = games[position]
 
         holder.itemView.apply {
-            textViewGame.text = curResult.team1 + " vs " + curResult.team2
-//            setOnClickListener {
-//                show(curResult.team1, curResult.team2)
-//            }
+            textViewGame.text = curResult.team1 + " - " + curResult.team2
+            textViewGameCompetition.text = curResult.competitionId.toString()
+            textViewGameDatetime.text = curResult.date
+            betDrawButton.text = "X\n${curResult.drawOdds}"
+            betHostButton.text = "X\n${curResult.team1Odds}"
+            betVisitorButton.text = "X\n${curResult.team2Odds}"
         }
     }
 
