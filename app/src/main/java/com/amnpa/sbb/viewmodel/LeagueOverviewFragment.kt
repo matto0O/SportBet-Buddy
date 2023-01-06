@@ -1,5 +1,6 @@
 package com.amnpa.sbb.viewmodel
 
+import android.content.Context
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -63,7 +64,9 @@ class LeagueOverviewFragment : Fragment() {
     override fun onStart() {
         fragmentContainerView = requireActivity().findViewById(R.id.fragmentContainerView)
         loading = requireActivity().findViewById(R.id.loadingScreen)
-        ParseJSON.fetchLeagues(
+        val id = requireActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE)
+            .getInt("user_id", -1)
+        ParseJSON.fetchLeagues(id,
             ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importLeagues)
         super.onStart()
     }

@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val prefs = getSharedPreferences("prefs", MODE_PRIVATE)
-        val id = prefs.getInt("user_id", -1)
+        val id = prefs.getInt("user_id", 2)
         if (id == -1){
             val authActivity = Intent(this, AuthActivity::class.java)
             startActivity(authActivity)
