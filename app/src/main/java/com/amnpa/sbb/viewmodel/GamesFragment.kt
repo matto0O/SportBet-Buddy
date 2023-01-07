@@ -73,7 +73,7 @@ class GamesFragment : Fragment() {
             .getInt("user_id", -1)
         ParseJSON.fetchGamesByUser(id,
             ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importGames)
-        ParseJSON.fetchBets(//id,
+        ParseJSON.fetchBetsByUser(id,
             ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importBets)
         ParseJSON.fetchCompetitions(
             ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importCompetitions)

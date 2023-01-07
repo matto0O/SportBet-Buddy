@@ -53,7 +53,8 @@ class GameAdapter(
                         else -> resources.getDrawable(R.drawable.international)
                     }
                 )
-            } catch(_:java.lang.NullPointerException){}
+            } catch(_:java.lang.NullPointerException)
+            {imageViewFlag.setImageDrawable(resources.getDrawable(R.drawable.international))}
         }
     }
 
