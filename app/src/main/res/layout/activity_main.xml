@@ -44,7 +44,6 @@
         app:mbn_circleColor="@color/app_main2"
         app:mbn_selectedIconColor="@color/white"
         app:mbn_defaultIconColor="@color/white"
-        app:mbn_backgroundBottomColor="@color/app_main2"
-        app:menu="@menu/bottom_nav"/>
+        app:mbn_backgroundBottomColor="@color/app_main2"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

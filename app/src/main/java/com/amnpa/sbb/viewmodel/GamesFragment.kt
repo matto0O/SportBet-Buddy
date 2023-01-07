@@ -34,11 +34,11 @@ class GamesFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_games, container, false)
 
         recyclerView = view.findViewById(R.id.gamesRecyclerView)
-        title = view.findViewById(R.id.textStatDescription)
+        title = view.findViewById(R.id.textGame)
         buttonGames = view.findViewById(R.id.gamesButton)
 
         competitions = HashMap()
-        betAdapter = BetAdapter(mutableListOf())
+        betAdapter = BetAdapter(mutableListOf(), competitions)
         gameAdapter = GameAdapter(mutableListOf(), competitions)
 
         recyclerView.adapter = betAdapter
@@ -112,9 +112,9 @@ class GamesFragment : Fragment() {
     private fun importBets(data: Array<Bet>?){
         requireActivity().runOnUiThread {
             try {
-                betAdapter.reloadData(data!!.asList())
+                betAdapter.reloadData(data!!.asList(), competitions)
             } catch (e: java.lang.NullPointerException) {
-                betAdapter.reloadData(emptyList())
+                betAdapter.reloadData(emptyList(), competitions)
             }
         }
     }

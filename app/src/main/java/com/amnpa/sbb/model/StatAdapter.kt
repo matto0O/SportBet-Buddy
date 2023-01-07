@@ -6,8 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.amnpa.sbb.R
-import kotlinx.android.synthetic.main.bet_card.view.*
-import kotlinx.android.synthetic.main.bet_card.view.textStatDescription
+import kotlinx.android.synthetic.main.bet_card.view.textGame
 import kotlinx.android.synthetic.main.stat_card.view.*
 
 class StatAdapter(private val stats: List<Pair<String,Any>>)
@@ -30,7 +29,7 @@ class StatAdapter(private val stats: List<Pair<String,Any>>)
         val stat = stats[position]
 
         holder.itemView.apply {
-            textStatDescription.text = stat.first
+            textGame.text = stat.first
             textStatValue.text = stat.second.toString()
         }
     }
