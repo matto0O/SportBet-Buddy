@@ -9,7 +9,8 @@ import com.amnpa.sbb.R
 import kotlinx.android.synthetic.main.game_card.view.*
 
 class GameAdapter(
-    private val games: MutableList<Game>
+    private val games: MutableList<Game>,
+    private var competitions: HashMap<Int, Competition>
 ) : RecyclerView.Adapter<GameAdapter.ResultViewHolder>() {
 
     class ResultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -24,17 +25,35 @@ class GameAdapter(
         )
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "UseCompatLoadingForDrawables")
     override fun onBindViewHolder(holder: ResultViewHolder, position: Int) {
         val curResult = games[position]
 
         holder.itemView.apply {
             textViewGame.text = curResult.team1 + " - " + curResult.team2
-            textViewGameCompetition.text = curResult.competitionId.toString()
+            val competition = competitions[curResult.competitionId]
+            textViewGameCompetition.text = competition!!.name
             textViewGameDatetime.text = curResult.date
             betDrawButton.text = "X\n${curResult.drawOdds}"
             betHostButton.text = "1\n${curResult.team1Odds}"
             betVisitorButton.text = "2\n${curResult.team2Odds}"
+            try {
+                imageViewFlag.setImageDrawable(
+                    when (competition.country.lowercase()) {
+                        "spain" -> resources.getDrawable(R.drawable.spain)
+                        "netherlands" -> resources.getDrawable(R.drawable.netherlands)
+                        "poland" -> resources.getDrawable(R.drawable.poland)
+                        "germany" -> resources.getDrawable(R.drawable.germany)
+                        "france" -> resources.getDrawable(R.drawable.france)
+                        "italy" -> resources.getDrawable(R.drawable.italy)
+                        "england" -> resources.getDrawable(R.drawable.england)
+                        "denmark" -> resources.getDrawable(R.drawable.denmark)
+                        "portugal" -> resources.getDrawable(R.drawable.portugal)
+                        "nationalteams" -> resources.getDrawable(R.drawable.nationalteams)
+                        else -> resources.getDrawable(R.drawable.international)
+                    }
+                )
+            } catch(_:java.lang.NullPointerException){}
         }
     }
 
@@ -43,7 +62,8 @@ class GameAdapter(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun reloadData(newData: List<Game>){
+    fun reloadData(newData: List<Game>, competitionsData: HashMap<Int, Competition>){
+        competitions = competitionsData
         games.clear()
         games.addAll(newData)
         notifyDataSetChanged()

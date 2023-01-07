@@ -25,6 +25,7 @@ class GamesFragment : Fragment() {
     private lateinit var title: TextView
     private lateinit var fragmentContainerView: FragmentContainerView
     private lateinit var loading: ImageView
+    private lateinit var competitions: HashMap<Int,Competition>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,8 +37,9 @@ class GamesFragment : Fragment() {
         title = view.findViewById(R.id.textStatDescription)
         buttonGames = view.findViewById(R.id.gamesButton)
 
+        competitions = HashMap()
         betAdapter = BetAdapter(mutableListOf())
-        gameAdapter = GameAdapter(mutableListOf())
+        gameAdapter = GameAdapter(mutableListOf(), competitions)
 
         recyclerView.adapter = betAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -73,6 +75,8 @@ class GamesFragment : Fragment() {
             ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importGames)
         ParseJSON.fetchBets(//id,
             ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importBets)
+        ParseJSON.fetchCompetitions(
+            ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importCompetitions)
         super.onStart()
     }
 
@@ -98,9 +102,9 @@ class GamesFragment : Fragment() {
     private fun importGames(data: Array<Game>?){
         requireActivity().runOnUiThread {
             try {
-                gameAdapter.reloadData(data!!.asList())
+                gameAdapter.reloadData(data!!.asList(), competitions)
             } catch (e: java.lang.NullPointerException) {
-                gameAdapter.reloadData(emptyList())
+                gameAdapter.reloadData(emptyList(), competitions)
             }
         }
     }
@@ -112,6 +116,14 @@ class GamesFragment : Fragment() {
             } catch (e: java.lang.NullPointerException) {
                 betAdapter.reloadData(emptyList())
             }
+        }
+    }
+
+    private fun importCompetitions(data: Array<Competition>?){
+        requireActivity().runOnUiThread {
+            try {
+                data!!.forEach { elem -> competitions += Pair(elem.competitionId, elem) }
+            } catch (_: java.lang.NullPointerException) { }
         }
     }
 }
