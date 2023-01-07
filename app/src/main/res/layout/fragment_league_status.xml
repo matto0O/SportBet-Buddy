@@ -6,10 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".viewmodel.LeagueStatusFragment">
 
-<!--        android:background="@drawable/background_popup"
-    android:backgroundTintMode="add"
-    android:backgroundTint="@color/app_main"-->
-
     <TextView
         android:id="@+id/textViewLeagueCode"
         android:layout_width="wrap_content"
@@ -46,23 +42,24 @@
 
     <Button
         android:id="@+id/buttonQuitLeague"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="@drawable/button_redish"
-        app:backgroundTint="#FFFFFF"
-        app:backgroundTintMode="multiply"
         android:text="@string/quit_league"
         android:textColor="@color/app_main2"
         android:textSize="12sp"
+        app:backgroundTint="#FFFFFF"
+        app:backgroundTintMode="multiply"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewLeagueName" />
 
-    <ListView
-        android:id="@+id/listViewPlayers"
-        android:layout_width="200dp"
-        android:layout_height="150dp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerPlayers"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="20dp"
         android:layout_marginTop="24dp"
         android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
