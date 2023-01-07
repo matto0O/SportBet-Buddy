@@ -7,7 +7,7 @@
     tools:context=".viewmodel.GamesFragment">
 
     <TextView
-        android:id="@+id/textStatDescription"
+        android:id="@+id/textGame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/results"
@@ -28,7 +28,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textStatDescription"
+        app:layout_constraintTop_toBottomOf="@+id/textGame"
         app:layout_constraintBottom_toTopOf="@+id/gamesButton"
         android:layout_margin="20dp"
         />
