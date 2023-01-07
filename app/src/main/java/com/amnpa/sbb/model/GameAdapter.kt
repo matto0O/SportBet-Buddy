@@ -35,27 +35,9 @@ class GameAdapter(
             val competition = competitions[curResult.competitionId]
             textViewGameCompetition.text = competition!!.name
             textViewGameDatetime.text = curResult.date
-//            betDrawButton.textOff = "X\n${curResult.drawOdds}"
-//            betDrawButton.textOn = "X\n${curResult.drawOdds}"
-//            betHostButton.textOff = "1\n${curResult.team1Odds}"
-//            betHostButton.textOn = "1\n${curResult.team1Odds}"
-//            betVisitorButton.textOff = "2\n${curResult.team2Odds}"
-//            betVisitorButton.textOn = "2\n${curResult.team2Odds}"
-//            betHostButton.setOnClickListener { button ->
-//                turnOnButton(button as ToggleButton)
-//                turnOffButton(betDrawButton as ToggleButton)
-//                turnOffButton(betVisitorButton as ToggleButton)
-//            }
-//            betVisitorButton.setOnClickListener { button ->
-//                turnOnButton(button as ToggleButton)
-//                turnOffButton(betDrawButton as ToggleButton)
-//                turnOffButton(betHostButton as ToggleButton)
-//            }
-//            betDrawButton.setOnClickListener { button ->
-//                turnOnButton(button as ToggleButton)
-//                turnOffButton(betHostButton as ToggleButton)
-//                turnOffButton(betVisitorButton as ToggleButton)
-//            }
+            betDrawButton.text = "X\n${curResult.drawOdds}"
+            betHostButton.text = "1\n${curResult.team1Odds}"
+            betVisitorButton.text = "2\n${curResult.team2Odds}"
             try {
                 imageViewFlag.setImageDrawable(
                     when (competition.country.lowercase()) {
@@ -74,17 +56,6 @@ class GameAdapter(
                 )
             } catch(_:java.lang.NullPointerException){}
         }
-    }
-
-    @SuppressLint("ResourceAsColor")
-    private fun turnOffButton(button: ToggleButton){
-        button.setTextColor(R.color.white)
-        button.isChecked = false
-    }
-
-    @SuppressLint("ResourceAsColor")
-    private fun turnOnButton(button: ToggleButton){
-        button.setTextColor(R.color.black)
     }
 
     override fun getItemCount(): Int {
