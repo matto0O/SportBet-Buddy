@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.amnpa.sbb.R
 import kotlinx.android.synthetic.main.bet_card.view.*
+import kotlinx.android.synthetic.main.game_card.view.*
 
 class BetAdapter(
     private val games: MutableList<Bet>,
+    private var competitions: HashMap<Int, Competition>
 ) : RecyclerView.Adapter<BetAdapter.ResultViewHolder>() {
 
     class ResultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -24,15 +26,23 @@ class BetAdapter(
         )
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "UseCompatLoadingForDrawables")
     override fun onBindViewHolder(holder: ResultViewHolder, position: Int) {
         val curResult = games[position]
 
         holder.itemView.apply {
-            textStatDescription.text = curResult.game.team1 + " vs " + curResult.game.team2
-//            setOnClickListener {
-//                show(curResult.gameId.toString(), curResult.gameId.toString())
-//            }
+            textGame.text = curResult.game.team1 + " - " + curResult.game.team2
+            textCompetition.text = competitions[curResult.game.competitionId]!!.name
+            textOdds.text = curResult.odds.toString()
+            textOption.text = curResult.option.toString()
+            textBetDate.text = curResult.game.date
+            resultImg.setImageDrawable(
+                when(curResult.game.result){
+                    curResult.option -> resources.getDrawable(R.drawable.ic_win)
+                    -1 -> resources.getDrawable(R.drawable.ic_unresolved)
+                    else -> resources.getDrawable(R.drawable.ic_loss)
+                }
+            )
         }
     }
 
@@ -41,7 +51,8 @@ class BetAdapter(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun reloadData(newData: List<Bet>){
+    fun reloadData(newData: List<Bet>, competitionsData: HashMap<Int, Competition>){
+        competitions = competitionsData
         games.clear()
         games.addAll(newData)
         notifyDataSetChanged()
