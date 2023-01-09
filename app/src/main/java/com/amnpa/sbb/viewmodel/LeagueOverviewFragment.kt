@@ -11,6 +11,7 @@ import android.widget.*
 import androidx.fragment.app.FragmentContainerView
 import androidx.navigation.fragment.findNavController
 import com.amnpa.sbb.R
+import com.amnpa.sbb.model.Group
 import com.amnpa.sbb.model.League
 import com.amnpa.sbb.model.ParseJSON
 
@@ -54,8 +55,19 @@ class LeagueOverviewFragment : Fragment() {
             if (textEnterCode.text.toString() == "")
                 Toast.makeText(context, "Invalid league code", Toast.LENGTH_SHORT).show()
             else
-                Toast.makeText(context, "TODO: joined a league of code: "
-                        +textEnterCode.text.toString(), Toast.LENGTH_SHORT).show()
+                requireActivity().runOnUiThread {
+                    val sharedPref = activity?.getSharedPreferences("prefs", Context.MODE_PRIVATE)
+                    if (sharedPref != null) {
+                        ParseJSON.fetchJoinGroup(
+                            textEnterCode.text.toString(),
+                            sharedPref.getInt("user_id", -1),
+                            ::triggerLoadingScreen,
+                            ::dissolveLoadingScreen,
+                            ::handleGroupJoin,
+                            context
+                        )
+                    }
+                }
         }
 
         return view
@@ -100,5 +112,9 @@ class LeagueOverviewFragment : Fragment() {
                     android.R.layout.simple_list_item_1, emptyList<League>())
             }
         }
+    }
+
+    private fun handleGroupJoin(data: Group?){
+
     }
 }

@@ -200,6 +200,52 @@ object ParseJSON {
         return result
     }
 
+    private fun createGroup(name: String, user: Int, context: Context?): Group? {
+        val json = """{
+            "name":"$name",
+            "user":"$user"}
+        """.trimIndent()
+
+        val mediaType = "application/json; charset=utf-8".toMediaType()
+        val requestBody = json.toRequestBody(mediaType)
+
+        val request = Request.Builder()
+            .method("POST", requestBody)
+            .url("http://10.0.2.2:5000/create-group")
+            .build()
+
+        var result: Group? = null
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) println()
+            result = gson.fromJson(response.body!!.string(), Group::class.java)
+        }
+        return result
+    }
+
+    private fun joinGroup(code: String, user: Int, context: Context?): Group? {
+        val json = """{
+            "code":"$code",
+            "user":"$user"}
+        """.trimIndent()
+
+        val mediaType = "application/json; charset=utf-8".toMediaType()
+        val requestBody = json.toRequestBody(mediaType)
+
+        val request = Request.Builder()
+            .method("POST", requestBody)
+            .url("http://10.0.2.2:5000/join-group")
+            .build()
+
+        var result: Group? = null
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) println()
+            result = gson.fromJson(response.body!!.string(), Group::class.java)
+        }
+        return result
+    }
+
     @OptIn(DelicateCoroutinesApi::class)
     fun fetchGames(startupFun: () -> Unit, cleanupFun: () -> Unit,
                    transferData: (Array<Game>?) -> Unit){
@@ -504,6 +550,53 @@ object ParseJSON {
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
+    fun fetchCreateGroup(name: String, user: Int, startupFun: () -> Unit, cleanupFun: () -> Unit,
+                          transferData: (Group?) -> Unit, context: Context?
+    ){
+        GlobalScope.launch(Dispatchers.IO){
+            startupFun()
+            val data = async {
+                try {
+                    return@async createGroup(name, user, context)
+                } catch (e:Exception) {
+                    when(e){
+                        is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
+                        is java.net.ConnectException,
+                        is java.net.SocketTimeoutException ->
+                            println()
+                        else -> throw e
+                    }
+                }
+            }.await() as Group?
+            cleanupFun()
+            transferData(data)
+        }
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun fetchJoinGroup(code: String, user: Int, startupFun: () -> Unit, cleanupFun: () -> Unit,
+                         transferData: (Group?) -> Unit, context: Context?
+    ){
+        GlobalScope.launch(Dispatchers.IO){
+            startupFun()
+            val data = async {
+                try {
+                    return@async joinGroup(code, user, context)
+                } catch (e:Exception) {
+                    when(e){
+                        is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
+                        is java.net.ConnectException,
+                        is java.net.SocketTimeoutException ->
+                            println()
+                        else -> throw e
+                    }
+                }
+            }.await() as Group?
+            cleanupFun()
+            transferData(data)
+        }
+    }
 }
 
 

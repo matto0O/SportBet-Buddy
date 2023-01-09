@@ -33,5 +33,9 @@
         android:id="@+id/leagueCreateFragment"
         android:name="com.amnpa.sbb.viewmodel.LeagueCreateFragment"
         android:label="fragment_league_create"
-        tools:layout="@layout/fragment_league_create" />
+        tools:layout="@layout/fragment_league_create" >
+    <action
+        android:id="@+id/action_leagueCreateFragment_to_leagueOverviewFragment"
+        app:destination="@id/leagueOverviewFragment" />
+    </fragment>
 </navigation>
