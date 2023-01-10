@@ -37,16 +37,6 @@ class LeagueCreateFragment : Fragment() {
         }
 
         buttonCommit.setOnClickListener {
-            println("kkkkkkk")
-            println(checkRowAdapter.getItem(0))
-            println(checkRowAdapter.getItem(0).checked)
-            println(checkRowAdapter.getItem(1))
-            println(checkRowAdapter.getItem(1).checked)
-            println(checkRowAdapter.getItem(2))
-            println(checkRowAdapter.getItem(2).checked)
-            println(checkRowAdapter.getItem(3))
-            println(checkRowAdapter.getItem(3).checked)
-            println("kkkkkkk")
             if (textLeagueName.text.toString().length < 3)
                 Toast.makeText(context, "Invalid league name", Toast.LENGTH_SHORT).show()
             else {
