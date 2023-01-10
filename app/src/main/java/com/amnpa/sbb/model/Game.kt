@@ -1,5 +1,6 @@
 package com.amnpa.sbb.model
 
+import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 
 data class Game (
@@ -17,5 +18,9 @@ data class Game (
 {
     override fun toString(): String {
         return "$team1 - $team2"
+    }
+
+    fun toJSON(): String{
+        return Gson().toJson(this)
     }
 }
