@@ -26,12 +26,15 @@ class GamesFragment : Fragment() {
     private lateinit var fragmentContainerView: FragmentContainerView
     private lateinit var loading: ImageView
     private lateinit var competitions: HashMap<Int,Competition>
+    private var userId = -1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_games, container, false)
+        userId = requireActivity()
+            .getSharedPreferences("prefs", MODE_PRIVATE).getInt("user_id", -1)
 
         recyclerView = view.findViewById(R.id.gamesRecyclerView)
         title = view.findViewById(R.id.textGame)
@@ -39,7 +42,7 @@ class GamesFragment : Fragment() {
 
         competitions = HashMap()
         betAdapter = BetAdapter(mutableListOf(), competitions)
-        gameAdapter = GameAdapter(mutableListOf(), competitions)
+        gameAdapter = GameAdapter(mutableListOf(), competitions, userId)
 
         recyclerView.adapter = betAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -48,14 +51,14 @@ class GamesFragment : Fragment() {
 
             when(title.text){
                 getString(R.string.results_games) -> {
-                    ParseJSON.fetchGames(
+                    ParseJSON.fetchGamesByUser(userId,
                         ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importGames)
                     title.text = getString(R.string.upcoming_games)
                     buttonGames.text = getString(R.string.results_games)
                     recyclerView.adapter = gameAdapter
                 }
                 getString(R.string.upcoming_games) -> {
-                    ParseJSON.fetchBets(
+                    ParseJSON.fetchBetsByUser(userId,
                         ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importBets)
                     title.text = getString(R.string.results_games)
                     buttonGames.text = getString(R.string.upcoming_games)
@@ -69,11 +72,9 @@ class GamesFragment : Fragment() {
     override fun onStart() {
         fragmentContainerView = requireActivity().findViewById(R.id.fragmentContainerView)
         loading = requireActivity().findViewById(R.id.loadingScreen)
-        val id = requireActivity().getSharedPreferences("prefs", MODE_PRIVATE)
-            .getInt("user_id", -1)
-        ParseJSON.fetchGamesByUser(id,
+        ParseJSON.fetchGamesByUser(userId,
             ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importGames)
-        ParseJSON.fetchBets(//id,
+        ParseJSON.fetchBetsByUser(userId,
             ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importBets)
         ParseJSON.fetchCompetitions(
             ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importCompetitions)

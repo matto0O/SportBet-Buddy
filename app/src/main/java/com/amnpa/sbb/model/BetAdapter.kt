@@ -1,11 +1,13 @@
 package com.amnpa.sbb.model
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.amnpa.sbb.R
+import com.nex3z.togglebuttongroup.button.LabelToggle
 import kotlinx.android.synthetic.main.bet_card.view.*
 import kotlinx.android.synthetic.main.game_card.view.*
 
