@@ -1,5 +1,6 @@
 package com.amnpa.sbb.viewmodel
 
+import android.content.Context
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,10 +10,12 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.FragmentManager
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amnpa.sbb.R
+import com.amnpa.sbb.model.Group
 import com.amnpa.sbb.model.ParseJSON
 import com.amnpa.sbb.model.Player
 import com.amnpa.sbb.model.PlayerAdapter
@@ -49,7 +52,19 @@ class LeagueStatusFragment : Fragment() {
         buttonQuit.setOnClickListener {
             Toast.makeText(context, "Left ${textLeagueName.text}", Toast.LENGTH_SHORT)
                 .show()
-            // TODO real implementation of leaving the league
+            requireActivity().runOnUiThread {
+                val sharedPref = activity?.getSharedPreferences("prefs", Context.MODE_PRIVATE)
+                if (sharedPref != null) {
+                    ParseJSON.fetchLeaveGroup(
+                        args.league.leagueId,
+                        sharedPref.getInt("user_id", -1),
+                        ::triggerLoadingScreen,
+                        ::dissolveLoadingScreen,
+                        ::handleGroupLeave,
+                        context
+                    )
+                }
+            }
         }
 
         val selected = args.league
@@ -95,6 +110,17 @@ class LeagueStatusFragment : Fragment() {
                 playerAdapter.reloadData(data!!.asList())
             } catch (e: java.lang.NullPointerException) {
                 playerAdapter.reloadData(emptyList())
+            }
+        }
+    }
+
+    private fun handleGroupLeave(data: Group?){
+        requireActivity().runOnUiThread {
+            if (data != null && data.name != null) {
+                findNavController().navigate(
+                    LeagueStatusFragmentDirections
+                        .actionLeagueStatusFragmentToLeagueOverviewFragment()
+                )
             }
         }
     }

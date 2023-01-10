@@ -214,6 +214,84 @@ object ParseJSON {
         return result
     }
 
+
+    private fun createGroup(name: String, user: Int, leagues: ArrayList<Int>, context: Context?): Group? {
+        val leagues_str = leagues.joinToString (
+            prefix = "[",
+            separator = ", ",
+            postfix = "]",
+            transform = { "$it" }
+        )
+        println(leagues_str)
+        val json = """{
+            "name":"$name",
+            "user":"$user",
+            "leagues":$leagues_str}
+        """.trimIndent()
+
+        val mediaType = "application/json; charset=utf-8".toMediaType()
+        val requestBody = json.toRequestBody(mediaType)
+
+        val request = Request.Builder()
+            .method("POST", requestBody)
+            .url("http://10.0.2.2:5000/create-group")
+            .build()
+
+        var result: Group? = null
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) println()
+            result = gson.fromJson(response.body!!.string(), Group::class.java)
+        }
+        return result
+    }
+
+    private fun joinGroup(code: String, user: Int, context: Context?): Group? {
+        val json = """{
+            "code":"$code",
+            "user":"$user"}
+        """.trimIndent()
+
+        val mediaType = "application/json; charset=utf-8".toMediaType()
+        val requestBody = json.toRequestBody(mediaType)
+
+        val request = Request.Builder()
+            .method("POST", requestBody)
+            .url("http://10.0.2.2:5000/join-group")
+            .build()
+
+        var result: Group? = null
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) println()
+            result = gson.fromJson(response.body!!.string(), Group::class.java)
+        }
+        return result
+    }
+
+    private fun leaveGroup(group: Int, user: Int, context: Context?): Group? {
+        val json = """{
+            "group":"$group",
+            "user":"$user"}
+        """.trimIndent()
+        
+        val mediaType = "application/json; charset=utf-8".toMediaType()
+        val requestBody = json.toRequestBody(mediaType)
+
+        val request = Request.Builder()
+            .method("POST", requestBody)
+            .url("http://10.0.2.2:5000/leave-group")
+            .build()
+
+        var result: Group? = null
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) println()
+            result = gson.fromJson(response.body!!.string(), Group::class.java)
+        }
+        return result
+    }
+
     private fun postBet(user: Int, game: Game, option: Int): Bet? {
         val json = """{
             "user":$user,
@@ -222,7 +300,7 @@ object ParseJSON {
         """.trimIndent()
 
         println(json)
-
+        
         val mediaType = "application/json; charset=utf-8".toMediaType()
         val requestBody = json.toRequestBody(mediaType)
 
@@ -239,6 +317,7 @@ object ParseJSON {
         }
         return result
     }
+
 
     @OptIn(DelicateCoroutinesApi::class)
     fun fetchGames(startupFun: () -> Unit, cleanupFun: () -> Unit,
@@ -571,6 +650,77 @@ object ParseJSON {
     }
 
     @OptIn(DelicateCoroutinesApi::class)
+    fun fetchCreateGroup(name: String, user: Int, leagues: ArrayList<Int>, startupFun: () -> Unit, cleanupFun: () -> Unit,
+                          transferData: (Group?) -> Unit, context: Context?
+    ){
+        GlobalScope.launch(Dispatchers.IO){
+            startupFun()
+            val data = async {
+                try {
+                    return@async createGroup(name, user, leagues, context)
+                } catch (e:Exception) {
+                    when(e){
+                        is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
+                        is java.net.ConnectException,
+                        is java.net.SocketTimeoutException ->
+                            println()
+                        else -> throw e
+                    }
+                }
+            }.await() as Group?
+            cleanupFun()
+            transferData(data)
+        }
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun fetchJoinGroup(code: String, user: Int, startupFun: () -> Unit, cleanupFun: () -> Unit,
+                         transferData: (Group?) -> Unit, context: Context?
+    ){
+        GlobalScope.launch(Dispatchers.IO){
+            startupFun()
+            val data = async {
+                try {
+                    return@async joinGroup(code, user, context)
+                } catch (e:Exception) {
+                    when(e){
+                        is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
+                        is java.net.ConnectException,
+                        is java.net.SocketTimeoutException ->
+                            println()
+                        else -> throw e
+                    }
+                }
+            }.await() as Group?
+            cleanupFun()
+            transferData(data)
+        }
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun fetchLeaveGroup(group: Int, user: Int, startupFun: () -> Unit, cleanupFun: () -> Unit,
+                       transferData: (Group?) -> Unit, context: Context?
+    ){
+        GlobalScope.launch(Dispatchers.IO){
+            startupFun()
+            val data = async {
+                try {
+                    return@async leaveGroup(group, user, context)
+                } catch (e:Exception) {
+                    when(e){
+                        is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
+                        is java.net.ConnectException,
+                        is java.net.SocketTimeoutException ->
+                            println()
+                        else -> throw e
+                    }
+                }
+            }.await() as Group?
+            cleanupFun()
+            transferData(data)
+        }
+    }
+    @OptIn(DelicateCoroutinesApi::class)
     fun fetchBetPost(userId: Int, game: Game, option: Int){
         GlobalScope.launch(Dispatchers.IO){
             async {
@@ -590,7 +740,6 @@ object ParseJSON {
             }
         }
     }
-
 }
 
 
