@@ -6,7 +6,7 @@ import java.util.*
 data class Player (@SerializedName("login") val name:String,
                    @SerializedName("id") val playerId:Int,
                    val bets: List<Int>,
-                   @SerializedName("memberships") val leagues: List<Int>){
+                   @SerializedName("score") val score: Float){
 
     private val queue: Queue<Double> = LinkedList()
 
