@@ -114,7 +114,7 @@ object ParseJSON {
 
     private fun getUsersByLeague(leagueId: Int): Array<Player>? {
         val request = Request.Builder()
-            .url("http://10.0.2.2:5000//users-by-group/$leagueId")
+            .url("http://10.0.2.2:5000//users-rank/$leagueId")
             .build()
 
         var result: Array<Player>? = null
