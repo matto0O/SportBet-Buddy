@@ -11,6 +11,8 @@ import com.amnpa.sbb.R
 
 class CheckRowAdapter(mContext: Context, private val dataSet: List<Competition>) :
     ArrayAdapter<Any?>(mContext, R.layout.row_checkbox, dataSet) {
+    private val items = HashMap<Int, ViewHolder>()
+
     private class ViewHolder {
         lateinit var txtName: TextView
         lateinit var checkBox: CheckBox
@@ -21,7 +23,7 @@ class CheckRowAdapter(mContext: Context, private val dataSet: List<Competition>)
     }
 
     override fun getItem(position: Int): CheckRow {
-        return CheckRow(dataSet[position])
+        return CheckRow(dataSet[position], if (items[position] != null) items[position]!!.checkBox.isChecked else false)
     }
 
     override fun getView(
@@ -29,28 +31,27 @@ class CheckRowAdapter(mContext: Context, private val dataSet: List<Competition>)
         convertView: View?,
         parent: ViewGroup
     ): View {
-        var convertView = convertView
+        var _convertView = convertView
         val viewHolder: ViewHolder
         val result: View
-        if (convertView == null) {
+        if (_convertView == null) {
             viewHolder = ViewHolder()
-            convertView =
+            _convertView =
                 LayoutInflater.from(parent.context).inflate(R.layout.row_checkbox, parent, false)
             viewHolder.txtName =
-                convertView.findViewById(R.id.txtName)
+                _convertView.findViewById(R.id.txtName)
             viewHolder.checkBox =
-                convertView.findViewById(R.id.checkBox)
-            result = convertView
-            convertView.tag = viewHolder
+                _convertView.findViewById(R.id.checkBox)
+            result = _convertView
+            _convertView.tag = viewHolder
         } else {
-            viewHolder = convertView.tag as ViewHolder
-            result = convertView
+            viewHolder = _convertView.tag as ViewHolder
+            result = _convertView
         }
-
         val item: CheckRow = getItem(position)
         viewHolder.txtName.text = item.toString()
         viewHolder.checkBox.isChecked = item.checked
+        items[position] = viewHolder
         return result
     }
-
 }
