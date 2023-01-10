@@ -100,7 +100,7 @@ object ParseJSON {
 
     private fun getGamesByUser(userId: Int): Array<Game>? {
         val request = Request.Builder()
-            .url("http://10.0.2.2:5000//games-by-group/$userId")
+            .url("http://10.0.2.2:5000//games-by-user/$userId")
             .build()
 
         var result: Array<Game>? = null
