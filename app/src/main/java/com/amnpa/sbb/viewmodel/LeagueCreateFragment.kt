@@ -33,18 +33,36 @@ class LeagueCreateFragment : Fragment() {
             val checkRow: CheckRow = checkRowAdapter.getItem(position)
             checkRow.checked = !checkRow.checked
             checkRowAdapter.notifyDataSetChanged()
+
         }
 
         buttonCommit.setOnClickListener {
+            println("kkkkkkk")
+            println(checkRowAdapter.getItem(0))
+            println(checkRowAdapter.getItem(0).checked)
+            println(checkRowAdapter.getItem(1))
+            println(checkRowAdapter.getItem(1).checked)
+            println(checkRowAdapter.getItem(2))
+            println(checkRowAdapter.getItem(2).checked)
+            println(checkRowAdapter.getItem(3))
+            println(checkRowAdapter.getItem(3).checked)
+            println("kkkkkkk")
             if (textLeagueName.text.toString().length < 3)
                 Toast.makeText(context, "Invalid league name", Toast.LENGTH_SHORT).show()
             else {
+                val list = arrayListOf<Int>()
+                for(i in 0..checkRowAdapter.count-1) {
+                    if(checkRowAdapter.getItem(i).checked)
+                        list.add(i+1)
+                }
+
                 requireActivity().runOnUiThread {
                     val sharedPref = activity?.getSharedPreferences("prefs", Context.MODE_PRIVATE)
                     if (sharedPref != null) {
                         ParseJSON.fetchCreateGroup(
                             textLeagueName.text.toString(),
                             sharedPref.getInt("user_id", -1),
+                            list,
                             ::triggerLoadingScreen,
                             ::dissolveLoadingScreen,
                             ::handleGroupCreation,

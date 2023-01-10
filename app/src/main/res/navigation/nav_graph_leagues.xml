@@ -25,6 +25,9 @@
         <argument
             android:name="league"
             app:argType="com.amnpa.sbb.model.League" />
+        <action
+            android:id="@+id/action_leagueStatusFragment_to_leagueOverviewFragment"
+            app:destination="@id/leagueOverviewFragment" />
     </fragment>
     <action
         android:id="@+id/action_global_leagueOverviewFragment"
