@@ -1,8 +1,13 @@
 package com.amnpa.sbb
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.amnpa.sbb.viewmodel.*
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation
 
@@ -45,6 +50,14 @@ class MainActivity : AppCompatActivity() {
             startActivity(authActivity)
         }
         else goToFragment(2)
+
+        checkPermission(
+            Manifest.permission.INTERNET,
+            INTERNET_P)
+        checkPermission(
+            Manifest.permission.ACCESS_NETWORK_STATE,
+            ANS_P)
+
     }
 
     private fun goToFragment(id: Int){
@@ -58,5 +71,33 @@ class MainActivity : AppCompatActivity() {
             .beginTransaction()
             .replace(R.id.fragmentContainerView, fragment)
             .commit()
+    }
+
+    private fun checkPermission(permission: String, requestCode: Int) {
+        if (ContextCompat.checkSelfPermission(this@MainActivity, permission) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(this@MainActivity, arrayOf(permission), requestCode)
+        } else {
+            Toast.makeText(this@MainActivity, "Permission already granted", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<String>,
+                                            grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == INTERNET_P) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this@MainActivity, "Internet Permission Granted", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this@MainActivity, "Internet Permission Denied", Toast.LENGTH_SHORT).show()
+            }
+        }
+        if (requestCode == ANS_P) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this@MainActivity, "Network Permission Granted", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this@MainActivity, "Network Permission Denied", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }
