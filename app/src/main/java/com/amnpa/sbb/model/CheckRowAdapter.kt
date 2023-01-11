@@ -23,9 +23,7 @@ class CheckRowAdapter(mContext: Context, private val dataSet: List<Competition>)
     }
 
     override fun getItem(position: Int): CheckRow {
-        return CheckRow(dataSet[position],
-            (items[position] != null) and (items[position]!!.checkBox.isChecked)
-        )
+        return CheckRow(dataSet[position], if (items[position] != null) items[position]!!.checkBox.isChecked else false)
     }
 
     override fun getView(
