@@ -25,6 +25,9 @@
         <argument
             android:name="league"
             app:argType="com.amnpa.sbb.model.League" />
+        <action
+            android:id="@+id/action_leagueStatusFragment_to_leagueOverviewFragment"
+            app:destination="@id/leagueOverviewFragment" />
     </fragment>
     <action
         android:id="@+id/action_global_leagueOverviewFragment"
@@ -33,5 +36,9 @@
         android:id="@+id/leagueCreateFragment"
         android:name="com.amnpa.sbb.viewmodel.LeagueCreateFragment"
         android:label="fragment_league_create"
-        tools:layout="@layout/fragment_league_create" />
+        tools:layout="@layout/fragment_league_create" >
+    <action
+        android:id="@+id/action_leagueCreateFragment_to_leagueOverviewFragment"
+        app:destination="@id/leagueOverviewFragment" />
+    </fragment>
 </navigation>

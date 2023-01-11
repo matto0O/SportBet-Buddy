@@ -100,7 +100,7 @@ object ParseJSON {
 
     private fun getGamesByUser(userId: Int): Array<Game>? {
         val request = Request.Builder()
-            .url("http://10.0.2.2:5000//games-by-group/$userId")
+            .url("http://10.0.2.2:5000//games-by-user/$userId")
             .build()
 
         var result: Array<Game>? = null
@@ -114,7 +114,7 @@ object ParseJSON {
 
     private fun getUsersByLeague(leagueId: Int): Array<Player>? {
         val request = Request.Builder()
-            .url("http://10.0.2.2:5000//users-by-group/$leagueId")
+            .url("http://10.0.2.2:5000//users-rank/$leagueId")
             .build()
 
         var result: Array<Player>? = null
@@ -136,6 +136,34 @@ object ParseJSON {
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw IOException("Unexpected code $response")
             result = gson.fromJson(response.body!!.string(), Array<Bet>::class.java)
+        }
+        return result
+    }
+
+    private fun getBetsByPlayer(userId: Int): Array<Bet>? {
+        val request = Request.Builder()
+            .url("http://10.0.2.2:5000//bets-by-player/$userId")
+            .build()
+
+        var result: Array<Bet>? = null
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+            result = gson.fromJson(response.body!!.string(), Array<Bet>::class.java)
+        }
+        return result
+    }
+
+    private fun getStatsByPlayer(userId: Int): StatsData? {
+        val request = Request.Builder()
+            .url("http://10.0.2.2:5000//stats/$userId")
+            .build()
+
+        var result: StatsData? = null
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+            result = gson.fromJson(response.body!!.string(), StatsData::class.java)
         }
         return result
     }
@@ -200,6 +228,111 @@ object ParseJSON {
         return result
     }
 
+
+    private fun createGroup(name: String, user: Int, leagues: ArrayList<Int>, context: Context?): Group? {
+        val leagues_str = leagues.joinToString (
+            prefix = "[",
+            separator = ", ",
+            postfix = "]",
+            transform = { "$it" }
+        )
+        println(leagues_str)
+        val json = """{
+            "name":"$name",
+            "user":"$user",
+            "leagues":$leagues_str}
+        """.trimIndent()
+
+        val mediaType = "application/json; charset=utf-8".toMediaType()
+        val requestBody = json.toRequestBody(mediaType)
+
+        val request = Request.Builder()
+            .method("POST", requestBody)
+            .url("http://10.0.2.2:5000/create-group")
+            .build()
+
+        var result: Group? = null
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) println()
+            result = gson.fromJson(response.body!!.string(), Group::class.java)
+        }
+        return result
+    }
+
+    private fun joinGroup(code: String, user: Int, context: Context?): Group? {
+        val json = """{
+            "code":"$code",
+            "user":"$user"}
+        """.trimIndent()
+
+        val mediaType = "application/json; charset=utf-8".toMediaType()
+        val requestBody = json.toRequestBody(mediaType)
+
+        val request = Request.Builder()
+            .method("POST", requestBody)
+            .url("http://10.0.2.2:5000/join-group")
+            .build()
+
+        var result: Group? = null
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) println()
+            result = gson.fromJson(response.body!!.string(), Group::class.java)
+        }
+        return result
+    }
+
+    private fun leaveGroup(group: Int, user: Int, context: Context?): Group? {
+        val json = """{
+            "group":"$group",
+            "user":"$user"}
+        """.trimIndent()
+        
+        val mediaType = "application/json; charset=utf-8".toMediaType()
+        val requestBody = json.toRequestBody(mediaType)
+
+        val request = Request.Builder()
+            .method("POST", requestBody)
+            .url("http://10.0.2.2:5000/leave-group")
+            .build()
+
+        var result: Group? = null
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) println()
+            result = gson.fromJson(response.body!!.string(), Group::class.java)
+        }
+        return result
+    }
+
+    private fun postBet(user: Int, game: Game, option: Int): Bet? {
+        val json = """{
+            "user":$user,
+            "game":${game.gameId/*game.toJSON()*/},
+            "option":$option}
+        """.trimIndent()
+
+        println(json)
+        
+        val mediaType = "application/json; charset=utf-8".toMediaType()
+        val requestBody = json.toRequestBody(mediaType)
+
+        val request = Request.Builder()
+            .method("POST", requestBody)
+            .url("http://10.0.2.2:5000/post-bet")
+            .build()
+
+        var result: Bet? = null
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) println("lol")
+            result = gson.fromJson(response.body!!.string(), Bet::class.java)
+        }
+        return result
+    }
+
+
     @OptIn(DelicateCoroutinesApi::class)
     fun fetchGames(startupFun: () -> Unit, cleanupFun: () -> Unit,
                    transferData: (Array<Game>?) -> Unit){
@@ -234,6 +367,31 @@ object ParseJSON {
                 while (true){
                     try {
                         return@async getBets()
+                    } catch (e:Exception) {
+                        when(e){
+                            is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
+                            is java.net.ConnectException,
+                            is java.net.SocketTimeoutException ->
+                                continue
+                            else -> throw e
+                        }
+                    }
+                }
+            }.await() as Array<Bet>?
+            cleanupFun()
+            transferData(data)
+        }
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun fetchBetsByUser(userId: Int, startupFun: () -> Unit, cleanupFun: () -> Unit,
+                  transferData: (Array<Bet>?) -> Unit){
+        GlobalScope.launch(Dispatchers.IO){
+            startupFun()
+            val data = async {
+                while (true){
+                    try {
+                        return@async getBetsByPlayer(userId)
                     } catch (e:Exception) {
                         when(e){
                             is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
@@ -328,6 +486,7 @@ object ParseJSON {
     @OptIn(DelicateCoroutinesApi::class)
     fun fetchGamesByUser(userId: Int, startupFun: () -> Unit, cleanupFun: () -> Unit,
                            transferData: (Array<Game>?) -> Unit){
+        println(userId)
         GlobalScope.launch(Dispatchers.IO){
             startupFun()
             val data = async {
@@ -499,6 +658,122 @@ object ParseJSON {
                     }
                 }
             }.await() as Register?
+            cleanupFun()
+            transferData(data)
+        }
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun fetchCreateGroup(name: String, user: Int, leagues: ArrayList<Int>, startupFun: () -> Unit, cleanupFun: () -> Unit,
+                          transferData: (Group?) -> Unit, context: Context?
+    ){
+        GlobalScope.launch(Dispatchers.IO){
+            startupFun()
+            val data = async {
+                try {
+                    return@async createGroup(name, user, leagues, context)
+                } catch (e:Exception) {
+                    when(e){
+                        is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
+                        is java.net.ConnectException,
+                        is java.net.SocketTimeoutException ->
+                            println()
+                        else -> throw e
+                    }
+                }
+            }.await() as Group?
+            cleanupFun()
+            transferData(data)
+        }
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun fetchJoinGroup(code: String, user: Int, startupFun: () -> Unit, cleanupFun: () -> Unit,
+                         transferData: (Group?) -> Unit, context: Context?
+    ){
+        GlobalScope.launch(Dispatchers.IO){
+            startupFun()
+            val data = async {
+                try {
+                    return@async joinGroup(code, user, context)
+                } catch (e:Exception) {
+                    when(e){
+                        is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
+                        is java.net.ConnectException,
+                        is java.net.SocketTimeoutException ->
+                            println()
+                        else -> throw e
+                    }
+                }
+            }.await() as Group?
+            cleanupFun()
+            transferData(data)
+        }
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun fetchLeaveGroup(group: Int, user: Int, startupFun: () -> Unit, cleanupFun: () -> Unit,
+                       transferData: (Group?) -> Unit, context: Context?
+    ){
+        GlobalScope.launch(Dispatchers.IO){
+            startupFun()
+            val data = async {
+                try {
+                    return@async leaveGroup(group, user, context)
+                } catch (e:Exception) {
+                    when(e){
+                        is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
+                        is java.net.ConnectException,
+                        is java.net.SocketTimeoutException ->
+                            println()
+                        else -> throw e
+                    }
+                }
+            }.await() as Group?
+            cleanupFun()
+            transferData(data)
+        }
+    }
+    @OptIn(DelicateCoroutinesApi::class)
+    fun fetchBetPost(userId: Int, game: Game, option: Int){
+        GlobalScope.launch(Dispatchers.IO){
+            async {
+                while (true){
+                    try {
+                        return@async postBet(userId, game, option)
+                    } catch (e:Exception) {
+                        when(e){
+                            is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
+                            is java.net.ConnectException,
+                            is java.net.SocketTimeoutException ->
+                                continue
+                            else -> throw e
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun fetchStats(user: Int, startupFun: () -> Unit, cleanupFun: () -> Unit,
+                       transferData: (StatsData?) -> Unit
+    ){
+        GlobalScope.launch(Dispatchers.IO){
+            startupFun()
+            val data = async {
+                try {
+                    return@async getStatsByPlayer(user)
+                } catch (e:Exception) {
+                    when(e){
+                        is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
+                        is java.net.ConnectException,
+                        is java.net.SocketTimeoutException ->
+                            println()
+                        else -> throw e
+                    }
+                }
+            }.await() as StatsData?
             cleanupFun()
             transferData(data)
         }

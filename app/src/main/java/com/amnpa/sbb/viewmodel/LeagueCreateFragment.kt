@@ -1,5 +1,6 @@
 package com.amnpa.sbb.viewmodel
 
+import android.content.Context
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,11 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.FragmentContainerView
+import androidx.navigation.fragment.findNavController
 import com.amnpa.sbb.R
-import com.amnpa.sbb.model.CheckRow
-import com.amnpa.sbb.model.CheckRowAdapter
-import com.amnpa.sbb.model.Competition
-import com.amnpa.sbb.model.ParseJSON
+import com.amnpa.sbb.model.*
 
 class LeagueCreateFragment : Fragment() {
     private lateinit var checkRowAdapter: CheckRowAdapter
@@ -34,14 +33,34 @@ class LeagueCreateFragment : Fragment() {
             val checkRow: CheckRow = checkRowAdapter.getItem(position)
             checkRow.checked = !checkRow.checked
             checkRowAdapter.notifyDataSetChanged()
+
         }
 
         buttonCommit.setOnClickListener {
             if (textLeagueName.text.toString().length < 3)
                 Toast.makeText(context, "Invalid league name", Toast.LENGTH_SHORT).show()
             else {
-                Toast.makeText(context, "Created ${textLeagueName.text}",
-                    Toast.LENGTH_SHORT).show()
+                val list = arrayListOf<Int>()
+                for(i in 0..checkRowAdapter.count-1) {
+                    if(checkRowAdapter.getItem(i).checked)
+                        list.add(i+1)
+                }
+
+                requireActivity().runOnUiThread {
+                    val sharedPref = activity?.getSharedPreferences("prefs", Context.MODE_PRIVATE)
+                    if (sharedPref != null) {
+                        ParseJSON.fetchCreateGroup(
+                            textLeagueName.text.toString(),
+                            sharedPref.getInt("user_id", -1),
+                            list,
+                            ::triggerLoadingScreen,
+                            ::dissolveLoadingScreen,
+                            ::handleGroupCreation,
+                            context
+                        )
+                    }
+                }
+
             }
         }
         return view
@@ -84,5 +103,18 @@ class LeagueCreateFragment : Fragment() {
             listEvents.adapter = checkRowAdapter
         }
     }
+
+
+    private fun handleGroupCreation(data: Group?){
+        requireActivity().runOnUiThread {
+            if (data != null && data.name != null) {
+                findNavController().navigate(
+                    LeagueCreateFragmentDirections
+                        .actionLeagueCreateFragmentToLeagueOverviewFragment()
+                )
+            }
+        }
+    }
+
 
 }

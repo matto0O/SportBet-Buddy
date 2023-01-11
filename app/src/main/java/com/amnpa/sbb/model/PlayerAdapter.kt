@@ -32,7 +32,7 @@ class PlayerAdapter(
         holder.itemView.apply {
             textPlayerPlace.text = "${position+1}."
             textNickname.text = curResult.name
-            textPoints.text = position.toString()  //TODO points
+            textPoints.text = curResult.score.toString()  //TODO points
 
             when(position){
                 0 -> {

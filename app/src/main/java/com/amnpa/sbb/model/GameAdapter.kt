@@ -11,7 +11,8 @@ import kotlinx.android.synthetic.main.game_card.view.*
 
 class GameAdapter(
     private val games: MutableList<Game>,
-    private var competitions: HashMap<Int, Competition>
+    private var competitions: HashMap<Int, Competition>,
+    private val userId: Int
 ) : RecyclerView.Adapter<GameAdapter.ResultViewHolder>() {
 
     class ResultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -54,7 +55,18 @@ class GameAdapter(
                         else -> resources.getDrawable(R.drawable.international)
                     }
                 )
-            } catch(_:java.lang.NullPointerException){}
+            } catch(_:java.lang.NullPointerException)
+            {imageViewFlag.setImageDrawable(resources.getDrawable(R.drawable.international))}
+
+            betDrawButton.setOnClickListener {
+                postBet(curResult, 0)
+            }
+            betHostButton.setOnClickListener {
+                postBet(curResult, 1)
+            }
+            betVisitorButton.setOnClickListener {
+                postBet(curResult, 2)
+            }
         }
     }
 
@@ -68,5 +80,11 @@ class GameAdapter(
         games.clear()
         games.addAll(newData)
         notifyDataSetChanged()
+    }
+
+    private fun postBet(game: Game, option: Int){
+        ParseJSON.fetchBetPost(
+            userId, game, option
+        )
     }
 }
