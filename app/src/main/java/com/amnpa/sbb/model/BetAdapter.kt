@@ -10,6 +10,12 @@ import com.amnpa.sbb.R
 import com.nex3z.togglebuttongroup.button.LabelToggle
 import kotlinx.android.synthetic.main.bet_card.view.*
 import kotlinx.android.synthetic.main.game_card.view.*
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
+import kotlin.collections.HashMap
 
 class BetAdapter(
     private val games: MutableList<Bet>,
@@ -36,8 +42,17 @@ class BetAdapter(
             textGame.text = curResult.game.team1 + " - " + curResult.game.team2
             textCompetition.text = competitions[curResult.game.competitionId]!!.name
             textOdds.text = curResult.odds.toString()
-            textOption.text = curResult.option.toString()
-            textBetDate.text = curResult.game.date
+            textOption.text = when (curResult.option){
+                0 -> "Draw"
+                1 -> "Host"
+                else -> "Visitor"
+            }
+            val date = curResult.game.date
+            val format = DateTimeFormatter.ofPattern("E, dd MMM yyyy HH:mm:ss z")
+            val newFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
+            val reprDate = ZonedDateTime
+                .of(LocalDateTime.parse(date, format), ZoneId.of("Poland"))
+            textBetDate.text = reprDate.format(newFormat)
             resultImg.setImageDrawable(
                 when(curResult.game.result){
                     curResult.option -> resources.getDrawable(R.drawable.ic_win)
