@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.amnpa.sbb.viewmodel.*
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     val INTERNET_P = 101
@@ -42,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         val id = prefs.getInt("user_id", -1)
         if (id == -1){
             val authActivity = Intent(this, AuthActivity::class.java)
+            finish()
             startActivity(authActivity)
         }
         else goToFragment(2)

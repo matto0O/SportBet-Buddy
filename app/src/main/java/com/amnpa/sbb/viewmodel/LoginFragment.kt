@@ -1,6 +1,7 @@
 package com.amnpa.sbb.viewmodel
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.FragmentContainerView
 import androidx.navigation.fragment.findNavController
+import com.amnpa.sbb.MainActivity
 import com.amnpa.sbb.R
 import com.amnpa.sbb.model.Login
 import com.amnpa.sbb.model.ParseJSON
@@ -99,8 +101,10 @@ class LoginFragment : Fragment() {
                 apply()
             }
             if (sharedPref != null) {
-                if(sharedPref.getInt("user_id", -1) != -1)
+                if(sharedPref.getInt("user_id", -1) != -1) {
                     requireActivity().finish()
+                    startActivity(Intent(requireActivity().applicationContext, MainActivity::class.java))
+                }
             }
         }
     }
