@@ -40,7 +40,8 @@ class BetAdapter(
 
         holder.itemView.apply {
             textGame.text = curResult.game.team1 + " - " + curResult.game.team2
-            textCompetition.text = competitions[curResult.game.competitionId]!!.name
+            val competition = competitions[curResult.game.competitionId]!!
+            textCompetition.text = competition.name
             textOdds.text = curResult.odds.toString()
             textOption.text = when (curResult.option){
                 0 -> "Draw"
@@ -60,6 +61,25 @@ class BetAdapter(
                     else -> resources.getDrawable(R.drawable.ic_loss)
                 }
             )
+
+            try {
+                imageViewFlagBet.setImageDrawable(
+                    when (competition.country.lowercase()) {
+                        "spain" -> resources.getDrawable(R.drawable.spain)
+                        "netherlands" -> resources.getDrawable(R.drawable.netherlands)
+                        "poland" -> resources.getDrawable(R.drawable.poland)
+                        "germany" -> resources.getDrawable(R.drawable.germany)
+                        "france" -> resources.getDrawable(R.drawable.france)
+                        "italy" -> resources.getDrawable(R.drawable.italy)
+                        "england" -> resources.getDrawable(R.drawable.england)
+                        "denmark" -> resources.getDrawable(R.drawable.denmark)
+                        "portugal" -> resources.getDrawable(R.drawable.portugal)
+                        "nationalteams" -> resources.getDrawable(R.drawable.nationalteams)
+                        else -> resources.getDrawable(R.drawable.international)
+                    }
+                )
+            } catch(_:java.lang.NullPointerException)
+            {imageViewFlag.setImageDrawable(resources.getDrawable(R.drawable.international))}
         }
     }
 
