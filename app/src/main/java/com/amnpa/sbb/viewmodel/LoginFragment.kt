@@ -87,14 +87,12 @@ class LoginFragment : Fragment() {
 
     private fun testAuthData(data: Login?){
         requireActivity().runOnUiThread {
-            println(data)
             val sharedPref = activity?.getSharedPreferences("prefs",Context.MODE_PRIVATE)
             sharedPref?.edit()?.apply {
                 if (data != null && data.userId != 0) {
                     putInt("user_id", data.userId)
                     putString("token", data.token)
                     putString("username", data.username)
-                    println(data.username)
                 } else {
                     Toast.makeText(context, "Invalid credentials", Toast.LENGTH_SHORT).show()
                 }
