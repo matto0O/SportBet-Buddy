@@ -18,6 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AMNPA"
         tools:targetApi="31"
+        android:windowSoftInputMode="stateVisible|adjustNothing"
         android:usesCleartextTraffic="true">
         <activity
             android:name=".MainActivity"

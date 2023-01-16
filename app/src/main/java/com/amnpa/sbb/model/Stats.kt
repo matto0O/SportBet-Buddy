@@ -8,7 +8,7 @@ object Stats {
     init {
         map["Total points"] = 0.0
         map["Total events bet on"] = 0
-        map["Success rate"] = 0.0
+        map["Success rate"] = "0%"
         map["Biggest win"] = 0.0
         map["Best streak"] = 0
         map["Most frequently bet on"] = "-"
@@ -40,7 +40,7 @@ object Stats {
         if(data != null){
             map["Total points"] = data.total_points
             map["Total events bet on"] = data.no_bets
-            map["Success rate"] = data.success_rate
+            map["Success rate"] = "${((data.success_rate * 1000).toInt()/10.0)}%"
             map["Biggest win"] = data.max_win
             map["Best streak"] = data.max_streak
             map["Most frequently bet on"] = data.most_freq_team
