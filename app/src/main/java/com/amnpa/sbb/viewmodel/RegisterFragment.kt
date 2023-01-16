@@ -16,6 +16,7 @@ class RegisterFragment : Fragment() {
 
     private lateinit var textUsername: EditText
     private lateinit var textPassword: EditText
+    private lateinit var textPasswordRepeat: EditText
     private lateinit var buttonSubmit: Button
     private lateinit var buttonLogin: Button
     private lateinit var loading: ImageView
@@ -31,11 +32,14 @@ class RegisterFragment : Fragment() {
 
         textUsername = view.findViewById(R.id.editTextUsername)
         textPassword = view.findViewById(R.id.editTextPassword)
+        textPasswordRepeat = view.findViewById(R.id.editTextPasswordRepeat)
         buttonSubmit = view.findViewById(R.id.buttonSubmit)
         buttonLogin = view.findViewById(R.id.buttonLogin)
 
         buttonSubmit.setOnClickListener{
-            if (textUsername.text.toString() == "" || textPassword.text.toString() == "")
+            if (textUsername.text.toString() == ""
+                || textPassword.text.toString() == ""
+                || (textPassword.text != textPasswordRepeat.text))
                 Toast.makeText(context, getString(R.string.not_created), Toast.LENGTH_SHORT).show()
             else
                 ParseJSON.fetchRegistration(
