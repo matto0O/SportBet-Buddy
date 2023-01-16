@@ -14,15 +14,16 @@ object ParseJSON {
     private val client = OkHttpClient()
     private val gson = Gson()
 
-    private fun getGroups(userId: Int): Array<League>? {
+    private fun getGroups(userId: Int, token: String): Array<League>? {
         val request = Request.Builder()
             .url("http://10.0.2.2:5000//groups-by-user/$userId")
+            .header("Token", token)
             .build()
 
         var result: Array<League>? = null
 
         client.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+            if (!response.isSuccessful) return null
             result = gson.fromJson(response.body!!.string(), Array<League>::class.java)
         }
         return result
@@ -313,8 +314,6 @@ object ParseJSON {
             "option":$option}
         """.trimIndent()
 
-        println(json)
-        
         val mediaType = "application/json; charset=utf-8".toMediaType()
         val requestBody = json.toRequestBody(mediaType)
 
@@ -565,14 +564,14 @@ object ParseJSON {
     }
 
     @OptIn(DelicateCoroutinesApi::class)
-    fun fetchLeagues(userId: Int, startupFun: () -> Unit, cleanupFun: () -> Unit,
+    fun fetchLeagues(userId: Int, token: String, startupFun: () -> Unit, cleanupFun: () -> Unit,
                      transferData: (Array<League>?) -> Unit){
         GlobalScope.launch(Dispatchers.IO){
             startupFun()
             val data = async {
                 while (true){
                     try {
-                        return@async getGroups(userId)
+                        return@async getGroups(userId, token)
                     } catch (e:Exception) {
                         when(e){
                             is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
@@ -646,15 +645,18 @@ object ParseJSON {
         GlobalScope.launch(Dispatchers.IO){
             startupFun()
             val data = async {
-                try {
-                    return@async postRegister(login, password, context)
-                } catch (e:Exception) {
-                    when(e){
-                        is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
-                        is java.net.ConnectException,
-                        is java.net.SocketTimeoutException ->
-                            println()
-                        else -> throw e
+                while (true) {
+
+                    try {
+                        return@async postRegister(login, password, context)
+                    } catch (e: Exception) {
+                        when (e) {
+                            is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
+                            is java.net.ConnectException,
+                            is java.net.SocketTimeoutException ->
+                                println()
+                            else -> throw e
+                        }
                     }
                 }
             }.await() as Register?
@@ -670,15 +672,17 @@ object ParseJSON {
         GlobalScope.launch(Dispatchers.IO){
             startupFun()
             val data = async {
-                try {
-                    return@async createGroup(name, user, leagues, context)
-                } catch (e:Exception) {
-                    when(e){
-                        is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
-                        is java.net.ConnectException,
-                        is java.net.SocketTimeoutException ->
-                            println()
-                        else -> throw e
+                while (true) {
+                    try {
+                        return@async createGroup(name, user, leagues, context)
+                    } catch (e: Exception) {
+                        when (e) {
+                            is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
+                            is java.net.ConnectException,
+                            is java.net.SocketTimeoutException ->
+                                println()
+                            else -> throw e
+                        }
                     }
                 }
             }.await() as Group?
@@ -694,15 +698,17 @@ object ParseJSON {
         GlobalScope.launch(Dispatchers.IO){
             startupFun()
             val data = async {
-                try {
-                    return@async joinGroup(code, user, context)
-                } catch (e:Exception) {
-                    when(e){
-                        is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
-                        is java.net.ConnectException,
-                        is java.net.SocketTimeoutException ->
-                            println()
-                        else -> throw e
+                while (true) {
+                    try {
+                        return@async joinGroup(code, user, context)
+                    } catch (e: Exception) {
+                        when (e) {
+                            is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
+                            is java.net.ConnectException,
+                            is java.net.SocketTimeoutException ->
+                                println()
+                            else -> throw e
+                        }
                     }
                 }
             }.await() as Group?
@@ -718,15 +724,17 @@ object ParseJSON {
         GlobalScope.launch(Dispatchers.IO){
             startupFun()
             val data = async {
-                try {
-                    return@async leaveGroup(group, user, context)
-                } catch (e:Exception) {
-                    when(e){
-                        is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
-                        is java.net.ConnectException,
-                        is java.net.SocketTimeoutException ->
-                            println()
-                        else -> throw e
+                while (true){
+                    try {
+                        return@async leaveGroup(group, user, context)
+                    } catch (e: Exception) {
+                        when (e) {
+                            is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
+                            is java.net.ConnectException,
+                            is java.net.SocketTimeoutException ->
+                                println()
+                            else -> throw e
+                        }
                     }
                 }
             }.await() as Group?
