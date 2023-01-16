@@ -78,8 +78,12 @@ class LeagueOverviewFragment : Fragment() {
         loading = requireActivity().findViewById(R.id.loadingScreen)
         val id = requireActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE)
             .getInt("user_id", -1)
-        ParseJSON.fetchLeagues(id,
-            ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importLeagues)
+        val sharedPref = requireActivity().getSharedPreferences("prefs",Context.MODE_PRIVATE)
+        val token = sharedPref.getString("token", "sample")
+        if (token != null) {
+            ParseJSON.fetchLeagues(id, token,
+                ::triggerLoadingScreen, ::dissolveLoadingScreen, ::importLeagues)
+        }
         super.onStart()
     }
 
