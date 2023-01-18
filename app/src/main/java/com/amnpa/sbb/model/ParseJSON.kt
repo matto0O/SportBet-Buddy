@@ -14,7 +14,7 @@ object ParseJSON {
     private val client = OkHttpClient()
     private val gson = Gson()
 
-    private fun getGroups(userId: Int, token: String): Array<League>? {
+    fun getGroups(userId: Int, token: String): Array<League>? {
         val request = Request.Builder()
             .url("http://10.0.2.2:5000//groups-by-user/$userId")
             .header("Token", token)
@@ -99,7 +99,7 @@ object ParseJSON {
         return result
     }
 
-    private fun getGamesByUser(userId: Int): Array<Game>? {
+    fun getGamesByUser(userId: Int): Array<Game>? {
         val request = Request.Builder()
             .url("http://10.0.2.2:5000//games-by-user/$userId")
             .build()
@@ -113,7 +113,7 @@ object ParseJSON {
         return result
     }
 
-    private fun getUsersByLeague(leagueId: Int): Array<Player>? {
+    fun getUsersByLeague(leagueId: Int): Array<Player>? {
         val request = Request.Builder()
             .url("http://10.0.2.2:5000//users-rank/$leagueId")
             .build()
@@ -206,7 +206,7 @@ object ParseJSON {
         return result
     }
 
-    private fun postRegister(username: String, password: String, context: Context?): Register? {
+    private fun postRegister(username: String, password: String): Register? {
         val json = """{
             "username":"$username",
             "password":"$password"}
@@ -230,7 +230,7 @@ object ParseJSON {
     }
 
 
-    private fun createGroup(name: String, user: Int, leagues: ArrayList<Int>, context: Context?): Group? {
+    private fun createGroup(name: String, user: Int, leagues: ArrayList<Int>): Group? {
         val leagues_str = leagues.joinToString (
             prefix = "[",
             separator = ", ",
@@ -261,7 +261,7 @@ object ParseJSON {
         return result
     }
 
-    private fun joinGroup(code: String, user: Int, context: Context?): Group? {
+    private fun joinGroup(code: String, user: Int): Group? {
         val json = """{
             "code":"$code",
             "user":"$user"}
@@ -284,7 +284,7 @@ object ParseJSON {
         return result
     }
 
-    private fun leaveGroup(group: Int, user: Int, context: Context?): Group? {
+    private fun leaveGroup(group: Int, user: Int): Group? {
         val json = """{
             "group":"$group",
             "user":"$user"}
@@ -648,7 +648,7 @@ object ParseJSON {
                 while (true) {
 
                     try {
-                        return@async postRegister(login, password, context)
+                        return@async postRegister(login, password)
                     } catch (e: Exception) {
                         when (e) {
                             is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
@@ -667,14 +667,14 @@ object ParseJSON {
 
     @OptIn(DelicateCoroutinesApi::class)
     fun fetchCreateGroup(name: String, user: Int, leagues: ArrayList<Int>, startupFun: () -> Unit, cleanupFun: () -> Unit,
-                          transferData: (Group?) -> Unit, context: Context?
+                          transferData: (Group?) -> Unit
     ){
         GlobalScope.launch(Dispatchers.IO){
             startupFun()
             val data = async {
                 while (true) {
                     try {
-                        return@async createGroup(name, user, leagues, context)
+                        return@async createGroup(name, user, leagues)
                     } catch (e: Exception) {
                         when (e) {
                             is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
@@ -700,7 +700,7 @@ object ParseJSON {
             val data = async {
                 while (true) {
                     try {
-                        return@async joinGroup(code, user, context)
+                        return@async joinGroup(code, user)
                     } catch (e: Exception) {
                         when (e) {
                             is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
@@ -726,7 +726,7 @@ object ParseJSON {
             val data = async {
                 while (true){
                     try {
-                        return@async leaveGroup(group, user, context)
+                        return@async leaveGroup(group, user)
                     } catch (e: Exception) {
                         when (e) {
                             is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków

@@ -55,8 +55,7 @@ class LeagueCreateFragment : Fragment() {
                             list,
                             ::triggerLoadingScreen,
                             ::dissolveLoadingScreen,
-                            ::handleGroupCreation,
-                            context
+                            ::handleGroupCreation
                         )
                     }
                 }
