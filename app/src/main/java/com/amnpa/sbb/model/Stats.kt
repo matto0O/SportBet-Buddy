@@ -3,7 +3,7 @@ package com.amnpa.sbb.model
 import kotlin.random.Random
 
 object Stats {
-    private val map = HashMap<String, Any>()
+    val map = HashMap<String, Any>()
 
     init {
         map["Total points"] = 0.0
@@ -36,15 +36,19 @@ object Stats {
 //        loading.alpha=0F
     }
 
-    private fun handleStats(data: StatsData?){
+    fun handleStats(data: StatsData?){
         if(data != null){
             map["Total points"] = data.total_points
             map["Total events bet on"] = data.no_bets
-            map["Success rate"] = "${((data.success_rate * 1000).toInt()/10.0)}%"
+            map["Success rate"] = convertToPercent(data.success_rate)
             map["Biggest win"] = data.max_win
             map["Best streak"] = data.max_streak
             map["Most frequently bet on"] = data.most_freq_team
         }
+    }
+
+    fun convertToPercent(x: Float): String {
+        return "${((x * 1000).toInt()/10.0)}%"
     }
 
     fun randomStats(amount: Int = map.size): List<Pair<String, Any>>{

@@ -33,5 +33,4 @@ class LoginFragmentDissolutionTest {
         println(authActivityRule.scenario.state)
         assert(authActivityRule.scenario.state == Lifecycle.State.DESTROYED)
     }
-
 }

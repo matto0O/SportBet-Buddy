@@ -8,30 +8,33 @@ import okhttp3.*
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.MediaType.Companion.toMediaType
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 object ParseJSON {
 
-    private val client = OkHttpClient()
+    private val client = OkHttpClient.Builder()
+        .connectTimeout(60, TimeUnit.SECONDS)
+        .build()
     private val gson = Gson()
 
-    private fun getGroups(userId: Int, token: String): Array<League>? {
+    fun getGroups(userId: Int, token: String): Array<League>? {
         val request = Request.Builder()
-            .url("http://10.0.2.2:5000//groups-by-user/$userId")
+            .url("http://localhost:5000//groups-by-user/$userId")
             .header("Token", token)
             .build()
 
         var result: Array<League>? = null
 
         client.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) return null
+            if (!response.isSuccessful) throw IOException("Unexpected code $response")
             result = gson.fromJson(response.body!!.string(), Array<League>::class.java)
         }
         return result
     }
 
-    private fun getCompetitions(): Array<Competition>? {
+    fun getCompetitions(): Array<Competition>? {
         val request = Request.Builder()
-            .url("http://10.0.2.2:5000//leagues")
+            .url("http://localhost:5000//leagues")
             .build()
 
         var result: Array<Competition>? = null
@@ -43,9 +46,9 @@ object ParseJSON {
         return result
     }
 
-    private fun getGames(): Array<Game>? {
+    fun getGames(): Array<Game>? {
         val request = Request.Builder()
-            .url("http://10.0.2.2:5000//games")
+            .url("http://localhost:5000//games")
             .build()
 
         var result: Array<Game>? = null
@@ -99,13 +102,12 @@ object ParseJSON {
         return result
     }
 
-    private fun getGamesByUser(userId: Int): Array<Game>? {
+    fun getGamesByUser(userId: Int): Array<Game>? {
         val request = Request.Builder()
-            .url("http://10.0.2.2:5000//games-by-user/$userId")
+            .url("http://localhost:5000//games-by-user/$userId")
             .build()
 
         var result: Array<Game>? = null
-
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw IOException("Unexpected code $response")
             result = gson.fromJson(response.body!!.string(), Array<Game>::class.java)
@@ -113,9 +115,9 @@ object ParseJSON {
         return result
     }
 
-    private fun getUsersByLeague(leagueId: Int): Array<Player>? {
+    fun getUsersByLeague(leagueId: Int): Array<Player>? {
         val request = Request.Builder()
-            .url("http://10.0.2.2:5000//users-rank/$leagueId")
+            .url("http://localhost:5000//users-rank/$leagueId")
             .build()
 
         var result: Array<Player>? = null
@@ -155,9 +157,9 @@ object ParseJSON {
         return result
     }
 
-    private fun getStatsByPlayer(userId: Int): StatsData? {
+    fun getStatsByPlayer(userId: Int): StatsData? {
         val request = Request.Builder()
-            .url("http://10.0.2.2:5000//stats/$userId")
+            .url("http://localhost:5000//stats/$userId")
             .build()
 
         var result: StatsData? = null
@@ -485,14 +487,16 @@ object ParseJSON {
     @OptIn(DelicateCoroutinesApi::class)
     fun fetchGamesByUser(userId: Int, startupFun: () -> Unit, cleanupFun: () -> Unit,
                            transferData: (Array<Game>?) -> Unit){
-        println(userId)
         GlobalScope.launch(Dispatchers.IO){
             startupFun()
             val data = async {
                 while (true){
                     try {
+                        println("bbbbb")
                         return@async getGamesByUser(userId)
                     } catch (e:Exception) {
+                        println("aaaa")
+                        println(e)
                         when(e){
                             is java.net.ProtocolException,      // TODO Toasty dla różnych wyjątków
                             is java.net.ConnectException,
