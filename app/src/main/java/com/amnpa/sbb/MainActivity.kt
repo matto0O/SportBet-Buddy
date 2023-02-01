@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         else goToFragment(2)
     }
 
-    private fun goToFragment(id: Int){
+    fun goToFragment(id: Int){
         val fragment = when(id){
             1 -> PlayerFragment()
             2 -> GamesFragment()

@@ -54,4 +54,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.5.1'
     implementation 'androidx.test.espresso:espresso-idling-resource:3.5.1'
     androidTestImplementation 'androidx.test.espresso:espresso-idling-resource:3.5.1'
+    implementation 'androidx.fragment:fragment:1.6.0-alpha04'
+    debugImplementation 'androidx.fragment:fragment-testing:1.6.0-alpha04'
 }

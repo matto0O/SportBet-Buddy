@@ -41,7 +41,7 @@ class LeagueCreateFragment : Fragment() {
                 Toast.makeText(context, "Invalid league name", Toast.LENGTH_SHORT).show()
             else {
                 val list = arrayListOf<Int>()
-                for(i in 0..checkRowAdapter.count-1) {
+                for(i in 0 until checkRowAdapter.count) {
                     if(checkRowAdapter.getItem(i).checked)
                         list.add(i+1)
                 }
